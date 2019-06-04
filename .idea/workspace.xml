@@ -31,7 +31,7 @@
           <entry key="md" value="1" />
           <entry key="properties" value="4" />
           <entry key="sql" value="1" />
-          <entry key="xml" value="12" />
+          <entry key="xml" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -43,7 +43,7 @@
           <entry key="Markdown" value="1" />
           <entry key="Properties" value="4" />
           <entry key="SQL" value="1" />
-          <entry key="XML" value="12" />
+          <entry key="XML" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -51,7 +51,7 @@
           <entry key="html" value="1" />
           <entry key="java" value="620" />
           <entry key="properties" value="113" />
-          <entry key="xml" value="75" />
+          <entry key="xml" value="76" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -59,7 +59,7 @@
           <entry key="HTML" value="1" />
           <entry key="JAVA" value="620" />
           <entry key="Properties" value="113" />
-          <entry key="XML" value="75" />
+          <entry key="XML" value="76" />
         </counts>
       </usages-collector>
     </session>
@@ -113,15 +113,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/filter/stateless/HmacAuthcFilter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -214,10 +205,12 @@
       <dir>$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub</dir>
     </dirStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/action/StatelessTestAction.java" />
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/domain/BaseEntity.java" />
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/filter/stateless/JwtPermsFilter.java" />
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/filter/FilterManager.java" />
@@ -268,6 +261,7 @@
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/filter/stateless/HmacPermsFilter.java" />
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub/filter/stateless/StatelessFilter.java" />
         <option value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/OverwriteApplication.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -297,6 +291,7 @@
     <option name="width" value="1386" />
     <option name="height" value="788" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -681,7 +676,7 @@
     <property name="SearchEverywhereHistoryKey" value="jcaptcha&#9;FILE&#9;jar:///Users/qihenan/maven/mavenLocal/com/octo/captcha/jcaptcha/1.0-all/jcaptcha-1.0-all.jar!/META-INF/maven/com.octo.captcha/jcaptcha&#10;ShiroConf&#9;PSI&#9;JAVA://org.qhn.stateless.two.ShiroConf" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559631756243" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559632007952" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/threeGitHub" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -745,12 +740,12 @@
       <option name="presentableId" value="Default" />
       <updated>1558682867611</updated>
       <workItem from="1558682870581" duration="28224000" />
-      <workItem from="1559032124913" duration="12808000" />
+      <workItem from="1559032124913" duration="13056000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41032000" />
+    <option name="totallyTimeSpent" value="41280000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -781,7 +776,7 @@
       <window_info anchor="bottom" id="SonarLint" order="5" />
       <window_info anchor="bottom" id="Java Enterprise" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="bottom" id="Run" order="10" />
       <window_info anchor="bottom" id="Debug" order="11" visible="true" weight="0.3120482" />
@@ -905,10 +900,6 @@
           <caret line="16" column="3" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
     </entry>
     <entry file="file://$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/two/HmacRealm.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1208,6 +1199,14 @@
           <caret line="31" column="43" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="43" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="30" lean-forward="true" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+        </state>
+      </provider>
+      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
     </entry>
     <entry file="file://$PROJECT_DIR$/overwrite/src/main/java/org/qhn/stateless/OverwriteApplication.java">
       <provider selected="true" editor-type-id="text-editor">
