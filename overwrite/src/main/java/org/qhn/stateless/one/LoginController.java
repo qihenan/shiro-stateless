@@ -13,8 +13,8 @@ public class LoginController {
 
     private static final String CLIENT_TYPE = "";
 
-    @RequestMapping("/login")
-    public void login(@RequestParam("code") String code, HttpServletRequest request) {
+//    @RequestMapping("/login")
+//    public void login(@RequestParam("code") String code, HttpServletRequest request) {
 
         /*Shiro框架的几个核心的管理对象。
         第一：ShiroFilterFactory：Shiro过滤器工厂类，具体的实现类是：ShiroFilterFactoryBean，此实现类是依赖于SecurityManager安全管理器的。
@@ -43,6 +43,6 @@ public class LoginController {
 //        //这里的代码，必须放到login之执行，因为login后，才会创建session，才会得到最新的token咯
 //        data.put(StatelessSessionManager.HEADER_TOKEN_NAME, getServerToken());
 //        response(data);
-    }
+//    }
 
 }
