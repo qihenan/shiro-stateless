@@ -8,15 +8,15 @@
 				<tbody>
 					<tr>
 						<td width="100"><label class="layui-form-label">资源：</label></td>
-						<td colspan="3"><select name="resourceIds" multiple="multiple" 
+						<td colspan="3"><select name="resourceIds" multiple="multiple"
 						style="width:300px;height:200px;">
 							<#list resources as resource>
-							<option value="${resource.id}"  
-							<#if selecteds!?seq_contains(resource.id)>selected</#if> 
+							<option value="${resource.id}"
+							<#if selecteds!?seq_contains(resource.id)>selected</#if>
 							>${resource.name} （${(resource.type==1)?string('菜单','按钮')}）    </option>
 							</#list>
 						</select>
-						
+
 						</td>
 					</tr>
 					<tr>

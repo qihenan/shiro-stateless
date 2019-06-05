@@ -25,17 +25,17 @@
 			</table>
 			<blockquote class="layui-elem-quote">
 				<div id="jwt_value_div" style="display: none;">
-					
+
 					<div class="layui-input-inline">
 						JWT令牌（有效期10秒）：<textarea rows="3" cols="200" id="jwt_value" name="jwt" class="layui-textarea"></textarea>
 					</div>
 				</div>
 			</blockquote>
-			
+
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 3px;">
 				<legend>API调用</legend>
 			</fieldset>
-			
+
 			<a class="layui-btn layui-btn-mini" onclick="jwtPost('add')">
 							<i class="layui-icon">&#xe642;</i> 请求API:add</a>
 							<br><br>
@@ -44,7 +44,7 @@
 							<br><br>
 			<a class="layui-btn layui-btn-mini" onclick="jwtGet('delete')">
 							<i class="layui-icon">&#xe642;</i> 请求API:delete</a>
-							<br><br>			
+							<br><br>
 
 							如果您想测试未进行身份认证情况，不点击"签发令牌"直接点击测试方法。
 							<br>
@@ -65,8 +65,8 @@
 			});
 			$("#jwt_value_div").show();
 		}
-		
-		
+
+
 		function jwtPost(_apiName) {
 			var jwt = $("#jwt_value").val();
 			ajaxPost('${ctx}/stateless/jwt_post',{
@@ -92,7 +92,7 @@
 					layer.alert(result.message,{icon:2, title:'失败'});
 				}
 			})
-		}	
+		}
 	</script>
 </body>
 </html>

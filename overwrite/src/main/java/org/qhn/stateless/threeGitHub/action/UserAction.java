@@ -23,6 +23,7 @@ import org.qhn.stateless.threeGitHub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,26 +41,28 @@ import com.google.common.base.Strings;
 @RequestMapping("/user")
 public class UserAction {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/list")
     public String list(Model model) {
-    	model.addAttribute("users", userService.list());
+        model.addAttribute("users", userService.list());
         return "user/user_list";
     }
 
     @RequestMapping("/edit")
-    public String edit(Model model,@RequestParam(name="account",required=false) String account) {
-    	if(!Strings.isNullOrEmpty(account))
-    		model.addAttribute("user", userService.getByAccount(account));
+    public String edit(Model model,
+        @RequestParam(name = "account", required = false) String account) {
+        if (!Strings.isNullOrEmpty(account)) {
+            model.addAttribute("user", userService.getByAccount(account));
+        }
         return "user/user_add";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public @ResponseBody
     BaseResponse save(@RequestBody UserEntity user) {
-    	userService.save(user);
+        userService.save(user);
         return BaseResponse.ok().message("用户添加成功");
     }
 
@@ -68,10 +71,22 @@ public class UserAction {
      * 加锁、解锁
      */
     @RequestMapping(value = "/switch_lock", method = RequestMethod.POST)
-    public @ResponseBody BaseResponse switchLock(@RequestParam(name="account") String account
-    														,@RequestParam Short lockStatus) {
-    	userService.updateStatus(account, lockStatus);
+    public @ResponseBody
+    BaseResponse switchLock(@RequestParam(name = "account") String account
+        , @RequestParam Short lockStatus) {
+        userService.updateStatus(account, lockStatus);
         return BaseResponse.ok().message("用户操作成功");
     }
+
+    /**
+     * 登陆动作
+     */
+    @PostMapping(value = "/login")
+    public void login(@RequestParam String account
+        , @RequestParam String password) {
+        //登录，默认md5加盐散列两次
+        System.out.println("login...");
+    }
+
 
 }
