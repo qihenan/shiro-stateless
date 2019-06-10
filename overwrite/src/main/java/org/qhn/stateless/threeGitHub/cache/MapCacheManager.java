@@ -32,74 +32,73 @@ import org.apache.shiro.cache.CacheManager;
  * @date 2016年6月31日
  */
 @SuppressWarnings("all")
-public class MapCacheManager implements CacheManager{
+public class MapCacheManager implements CacheManager {
 
+    private final ConcurrentMap<String, Cache> CACHES = new ConcurrentHashMap<String, Cache>();
 
-	private final ConcurrentMap<String, Cache> CACHES = new ConcurrentHashMap<String, Cache>();
-
-	@Override
-	public <K, V> Cache<K, V> getCache(String cacheName) throws CacheException {
-		Cache<K, V> cache = CACHES.get(cacheName);
+    @Override
+    public <K, V> Cache<K, V> getCache(String cacheName) throws CacheException {
+        Cache<K, V> cache = CACHES.get(cacheName);
         if (null == cache) {
-        	cache = new MapCache<K, V>(cacheName);
+            cache = new MapCache<K, V>(cacheName);
             CACHES.put(cacheName, cache);
         }
         return cache;
-	}
+    }
 
-	/**
-	 * 基于MAP的缓存
-	 *
-	 * @author wangjie (https://github.com/wj596)
-	 * @date 2016年6月31日
-	 */
-	public static class MapCache<K,V> implements Cache<K,V>{
+    /**
+     * 基于MAP的缓存
+     *
+     * @author wangjie (https://github.com/wj596)
+     * @date 2016年6月31日
+     */
+    public static class MapCache<K, V> implements Cache<K, V> {
 
-		private final ConcurrentMap<K,V> storge = new ConcurrentHashMap<K,V>();
-		private final String cacheName;
+        private final ConcurrentMap<K, V> storge = new ConcurrentHashMap<K, V>();
+        private final String cacheName;
 
-		public MapCache(String cacheName){
-			this.cacheName = cacheName;
-		}
+        public MapCache(String cacheName) {
+            this.cacheName = cacheName;
+        }
 
-		@Override
-		public void clear() throws CacheException {
-			storge.clear();
-		}
+        @Override
+        public void clear() throws CacheException {
+            storge.clear();
+        }
 
-		@Override
-		public V get(K key) throws CacheException {
-			return storge.get(key);
-		}
+        @Override
+        public V get(K key) throws CacheException {
+            return storge.get(key);
+        }
 
-		@Override
-		public Set<K> keys() {
-			return storge.keySet();
-		}
+        @Override
+        public Set<K> keys() {
+            return storge.keySet();
+        }
 
-		@Override
-		public V put(K key, V value) throws CacheException {
-			return storge.put(key, value);
-		}
+        @Override
+        public V put(K key, V value) throws CacheException {
+            return storge.put(key, value);
+        }
 
-		@Override
-		public V remove(K key) throws CacheException {
-			return storge.remove(key);
-		}
+        @Override
+        public V remove(K key) throws CacheException {
+            return storge.remove(key);
+        }
 
-		@Override
-		public int size() {
-			return storge.size();
-		}
+        @Override
+        public int size() {
+            return storge.size();
+        }
 
-		@Override
-		public Collection<V> values() {
-			return storge.values();
-		}
+        @Override
+        public Collection<V> values() {
+            return storge.values();
+        }
 
-		@Override
-		public String toString() {
-			return "cacheName:"+this.cacheName+",size:"+this.size();
-		}
-	}
+        @Override
+        public String toString() {
+            return "cacheName:" + this.cacheName + ",size:" + this.size();
+        }
+    }
 }

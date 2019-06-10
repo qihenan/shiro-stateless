@@ -31,23 +31,23 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnMissingBean(JsetsShiroConfigurationAdapter.class)
-public class DefaultShiroConfiguration extends JsetsShiroConfigurationAdapter{
+public class DefaultShiroConfiguration extends JsetsShiroConfigurationAdapter {
 
-	@Autowired
-	private ShiroCryptoService shiroCryptoService;
+    @Autowired
+    private ShiroCryptoService shiroCryptoService;
 
-	@Override
-	protected void configure(SecurityManagerConfig securityManager) {
-		System.out.println("欢迎使用： jsets-shiro-spring-boot-starter");
-		System.out.println("已为您创建体验账号： test,密码test");
-		DefaultAccountProvider defAccountProvider = new DefaultAccountProvider();
-		defAccountProvider.setShiroCryptoService(shiroCryptoService);
-		securityManager.setAccountProvider(defAccountProvider);
-	}
+    @Override
+    protected void configure(SecurityManagerConfig securityManager) {
+        System.out.println("欢迎使用： jsets-shiro-spring-boot-starter");
+        System.out.println("已为您创建体验账号： test,密码test");
+        DefaultAccountProvider defAccountProvider = new DefaultAccountProvider();
+        defAccountProvider.setShiroCryptoService(shiroCryptoService);
+        securityManager.setAccountProvider(defAccountProvider);
+    }
 
-	@Override
-	protected void configure(FilterChainConfig filterChain) {
+    @Override
+    protected void configure(FilterChainConfig filterChain) {
 
-	}
+    }
 
 }

@@ -25,22 +25,22 @@ import org.apache.shiro.authc.AuthenticationToken;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
  */
-public abstract class StatelessToken implements AuthenticationToken{
+public abstract class StatelessToken implements AuthenticationToken {
 
-	private static final long serialVersionUID = 6655946030026745372L;
+    private static final long serialVersionUID = 6655946030026745372L;
 
-	private String host;// 客户IP
+    private String host;// 客户IP
 
-	public StatelessToken(String host){
-		this.host = host;
-	}
+    public StatelessToken(String host) {
+        this.host = host;
+    }
 
-	public String getHost() {
-		return host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public void setHost(String host) {
-		this.host = host;
-	}
+    public void setHost(String host) {
+        this.host = host;
+    }
 
 }

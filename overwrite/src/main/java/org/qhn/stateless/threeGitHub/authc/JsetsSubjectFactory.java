@@ -32,24 +32,25 @@ import org.qhn.stateless.threeGitHub.util.Commons;
  */
 public class JsetsSubjectFactory extends DefaultWebSubjectFactory {
 
-	private final DefaultSessionStorageEvaluator storageEvaluator;
+    private final DefaultSessionStorageEvaluator storageEvaluator;
 
-	/**
-	 * DefaultSessionStorageEvaluator是否持久化SESSION的开关
-	 */
-	public JsetsSubjectFactory(DefaultSessionStorageEvaluator storageEvaluator){
-		this.storageEvaluator = storageEvaluator;
-	}
+    /**
+     * DefaultSessionStorageEvaluator是否持久化SESSION的开关
+     */
+    public JsetsSubjectFactory(DefaultSessionStorageEvaluator storageEvaluator) {
+        this.storageEvaluator = storageEvaluator;
+    }
 
     public Subject createSubject(SubjectContext context) {
-    	this.storageEvaluator.setSessionStorageEnabled(Boolean.TRUE);
-    	AuthenticationToken token = context.getAuthenticationToken();
-    	if(Commons.isStatelessToken(token)){
+        this.storageEvaluator.setSessionStorageEnabled(Boolean.TRUE);
+        AuthenticationToken token = context.getAuthenticationToken();
+        // 当token为statelessToken时， 不创建 session
+        if (Commons.isStatelessToken(token)) {
             // 不创建 session
             context.setSessionCreationEnabled(false);
             // 不持久化session
             this.storageEvaluator.setSessionStorageEnabled(Boolean.FALSE);
-    	}
+        }
         return super.createSubject(context);
     }
 

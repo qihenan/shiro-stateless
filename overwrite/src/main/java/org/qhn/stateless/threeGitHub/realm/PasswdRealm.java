@@ -39,50 +39,54 @@ import org.qhn.stateless.threeGitHub.service.ShiroAccountProvider;
  */
 public class PasswdRealm extends AuthorizingRealm {
 
-	private MessageConfig messages;
-	private ShiroAccountProvider accountProvider;
+    private MessageConfig messages;
+    private ShiroAccountProvider accountProvider;
 
-	public Class<?> getAuthenticationTokenClass() {
-		return UsernamePasswordToken.class;
-	}
+    public Class<?> getAuthenticationTokenClass() {
+        return UsernamePasswordToken.class;
+    }
 
-	/**
-	 * 认证
-	 */
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    /**
+     * 认证
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+        throws AuthenticationException {
 
-		if(null==token.getPrincipal()||null==token.getCredentials()){
-			throw new AuthenticationException(messages.getMsgAccountPasswordEmpty());
-		}
-		String account = (String) token.getPrincipal();
-		Account accountEntity = this.accountProvider.loadAccount(account);
-		if (null == accountEntity) {
-			throw new AuthenticationException(messages.getMsgAccountNotExist());
-		}
-		return new SimpleAuthenticationInfo(account,accountEntity.getPassword(), getName());
-	}
+        if (null == token.getPrincipal() || null == token.getCredentials()) {
+            throw new AuthenticationException(messages.getMsgAccountPasswordEmpty());
+        }
+        String account = (String) token.getPrincipal();
+        Account accountEntity = this.accountProvider.loadAccount(account);
+        if (null == accountEntity) {
+            throw new AuthenticationException(messages.getMsgAccountNotExist());
+        }
+        return new SimpleAuthenticationInfo(account, accountEntity.getPassword(), getName());
+    }
 
-	/**
-	 * 授权
-	 */
-	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		String account = (String) principals.getPrimaryPrincipal();
-		SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
-		Set<String> roles = this.accountProvider.loadRoles(account);
-		Set<String> permissions = this.accountProvider.loadPermissions(account);
-		if(null!=roles&&!roles.isEmpty())
-			info.setRoles(roles);
-		if(null!=permissions&&!permissions.isEmpty())
-			info.setStringPermissions(permissions);
+    /**
+     * 授权
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        String account = (String) principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        Set<String> roles = this.accountProvider.loadRoles(account);
+        Set<String> permissions = this.accountProvider.loadPermissions(account);
+        if (null != roles && !roles.isEmpty()) {
+            info.setRoles(roles);
+        }
+        if (null != permissions && !permissions.isEmpty()) {
+            info.setStringPermissions(permissions);
+        }
         return info;
-	}
+    }
 
-	public void setMessages(MessageConfig messages) {
-		this.messages = messages;
-	}
-	public void setAccountProvider(ShiroAccountProvider accountProvider) {
-		this.accountProvider = accountProvider;
-	}
+    public void setMessages(MessageConfig messages) {
+        this.messages = messages;
+    }
+
+    public void setAccountProvider(ShiroAccountProvider accountProvider) {
+        this.accountProvider = accountProvider;
+    }
 }

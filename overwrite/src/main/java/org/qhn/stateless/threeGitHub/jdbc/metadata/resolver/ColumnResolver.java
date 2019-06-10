@@ -27,22 +27,23 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.FieldElement;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public class ColumnResolver implements Resolver{
+public class ColumnResolver implements Resolver {
 
-	@Override
-	public void resolve(Element element, Annotation annotation) {
-		FieldElement fieldElement = (FieldElement)element;
-		javax.persistence.Column column = (javax.persistence.Column) annotation;
-		if (!Strings.isNullOrEmpty(column.name())) fieldElement.setColumn(column.name());
-		fieldElement.setNullable(column.nullable());
-		fieldElement.setUnique(column.unique());
-		fieldElement.setLength(column.length());
-		fieldElement.setColumnDefinition(column.columnDefinition());
-		fieldElement.setInsertable(column.insertable());
-		fieldElement.setUpdatable(column.updatable());
-		fieldElement.setTable(column.table());
-	}
+    @Override
+    public void resolve(Element element, Annotation annotation) {
+        FieldElement fieldElement = (FieldElement) element;
+        javax.persistence.Column column = (javax.persistence.Column) annotation;
+        if (!Strings.isNullOrEmpty(column.name())) {
+            fieldElement.setColumn(column.name());
+        }
+        fieldElement.setNullable(column.nullable());
+        fieldElement.setUnique(column.unique());
+        fieldElement.setLength(column.length());
+        fieldElement.setColumnDefinition(column.columnDefinition());
+        fieldElement.setInsertable(column.insertable());
+        fieldElement.setUpdatable(column.updatable());
+        fieldElement.setTable(column.table());
+    }
 
 }

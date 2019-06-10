@@ -24,28 +24,28 @@ import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 /**
  * 自动配置配置
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 @Configuration
 @AutoConfigureAfter(JdbcTemplateAutoConfiguration.class)
 public class JsetsJdbcAutoConfiguration {
 
-	private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-	public JsetsJdbcAutoConfiguration(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+    public JsetsJdbcAutoConfiguration(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-	@Value("${jsets.jdbc.dialect}")
-	private String dialectName;
+    @Value("${jsets.jdbc.dialect}")
+    private String dialectName;
 
-	@Bean
-	public JdbcEnhance jdbcEnhance() {
-		return new JdbcEnhance(this.jdbcTemplate,this.dialectName);
-	}
+    @Bean
+    public JdbcEnhance jdbcEnhance() {
+        return new JdbcEnhance(this.jdbcTemplate, this.dialectName);
+    }
 }

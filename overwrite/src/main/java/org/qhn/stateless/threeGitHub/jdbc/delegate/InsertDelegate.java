@@ -29,47 +29,49 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
+
 /**
- *
  * 新增执行器
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class InsertDelegate extends AbstractDelegate<Integer> {
 
-	private final Object persistent;
-	private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
-	private LinkedList<ValueElement> valueElements;
+    private final Object persistent;
+    private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
+    private LinkedList<ValueElement> valueElements;
 
-	public InsertDelegate(JdbcTemplate jdbcTemplate,Object persistent) {
-		super(jdbcTemplate);
-		this.persistent = persistent;
-	}
+    public InsertDelegate(JdbcTemplate jdbcTemplate, Object persistent) {
+        super(jdbcTemplate);
+        this.persistent = persistent;
+    }
 
-	@Override
-	public void prepare() {
-		this.checkEntity(this.persistent.getClass());
-		EntityElement entityElement = ElementResolver.resolve(this.persistent.getClass());
-		this.valueElements = Lists.newLinkedList();
-		this.sqlBuilder.INSERT_INTO(entityElement.getTable());
-		for (FieldElement fieldElement: entityElement.getFieldElements().values()) {
-			if(fieldElement.isTransientField()) continue;
-			Object value = JdbcCommons.invokeMethod(this.persistent, fieldElement.getReadMethod()
-							, "实体："+entityElement.getName()+" 字段："+fieldElement.getName()+" 获取值失败");
-			if (fieldElement.isPrimaryKey()) {
-				value = super.generatedId(this.persistent,fieldElement, value);
-				Assert.notNull(value,"实体:" + entityElement.getName() + ", 主键不能为空");
-			}
-			this.sqlBuilder.VALUES(fieldElement.getColumn(), "?");
-			this.valueElements.add(new ValueElement(value,fieldElement.isClob(),fieldElement.isBlob()));
-		}
-	}
+    @Override
+    public void prepare() {
+        this.checkEntity(this.persistent.getClass());
+        EntityElement entityElement = ElementResolver.resolve(this.persistent.getClass());
+        this.valueElements = Lists.newLinkedList();
+        this.sqlBuilder.INSERT_INTO(entityElement.getTable());
+        for (FieldElement fieldElement : entityElement.getFieldElements().values()) {
+            if (fieldElement.isTransientField()) {
+                continue;
+            }
+            Object value = JdbcCommons.invokeMethod(this.persistent, fieldElement.getReadMethod()
+                , "实体：" + entityElement.getName() + " 字段：" + fieldElement.getName() + " 获取值失败");
+            if (fieldElement.isPrimaryKey()) {
+                value = super.generatedId(this.persistent, fieldElement, value);
+                Assert.notNull(value, "实体:" + entityElement.getName() + ", 主键不能为空");
+            }
+            this.sqlBuilder.VALUES(fieldElement.getColumn(), "?");
+            this.valueElements
+                .add(new ValueElement(value, fieldElement.isClob(), fieldElement.isBlob()));
+        }
+    }
 
-	@Override
-	protected Integer doExecute() throws DataAccessException{
-		String sql = this.sqlBuilder.toString().toUpperCase();
-		return this.jdbcTemplate.update(sql,new ValueSetter(this.LOBHANDLER,this.valueElements));
-	}
+    @Override
+    protected Integer doExecute() throws DataAccessException {
+        String sql = this.sqlBuilder.toString().toUpperCase();
+        return this.jdbcTemplate.update(sql, new ValueSetter(this.LOBHANDLER, this.valueElements));
+    }
 }

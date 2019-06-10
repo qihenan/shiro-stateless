@@ -37,46 +37,54 @@ import org.slf4j.LoggerFactory;
  * 登陆过滤，器扩展自FormAuthenticationFilter：增加了针对ajax请求的处理、jcaptcha验证码
  *
  * author wangjie (https://github.com/wj596)
+ *
  * @date 2016年6月31日
  */
 public class JsetsFormAuthenticationFilter extends FormAuthenticationFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JsetsFormAuthenticationFilter.class);
+    private static final Logger LOGGER = LoggerFactory
+        .getLogger(JsetsFormAuthenticationFilter.class);
 
-	private ShiroProperties properties;
-	private MessageConfig messages;
+    private ShiroProperties properties;
+    private MessageConfig messages;
 
 
     @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) {
 
-    	// 如果已经登陆，还停留在登陆页面，跳转到登陆成功页面
-    	if (null != getSubject(request, response) && getSubject(request, response).isAuthenticated()) {
-			if (isLoginRequest(request, response)) {
-				try {
-					issueSuccessRedirect(request, response);
-					return true;
-				} catch (Exception e) {
-					LOGGER.error(e.getMessage(),e);
-				}
-			}
-		}
-    	// 父类判断是否放行
-    	return super.isAccessAllowed(request,response,mappedValue);
+        // 如果已经登陆，还停留在登陆页面，跳转到登陆成功页面
+        if (null != getSubject(request, response) && getSubject(request, response)
+            .isAuthenticated()) {
+            if (isLoginRequest(request, response)) {
+                try {
+                    issueSuccessRedirect(request, response);
+                    return true;
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+            }
+        }
+        // 父类判断是否放行
+        return super.isAccessAllowed(request, response, mappedValue);
     }
 
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-    	if (isLoginRequest(request, response)) {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
+        throws Exception {
+        if (isLoginRequest(request, response)) {
             if (isLoginSubmission(request, response)) {//是否登陆请求
                 // 是否启用验证码
-                if(this.properties.isJcaptchaEnable()){
-                	String jcaptcha = WebUtils.getCleanParam(request, ShiroProperties.PARAM_JCAPTCHA);
-                	if(Strings.isNullOrEmpty(jcaptcha)){
-                		return onJcaptchaFailure(request, response,this.messages.getMsgCaptchaEmpty());
-                	}
-                	if(!JCaptchaUtil.validateCaptcha(WebUtils.toHttp(request), jcaptcha)){
-                		return onJcaptchaFailure(request, response,this.messages.getMsgCaptchaError());
-                	}
+                if (this.properties.isJcaptchaEnable()) {
+                    String jcaptcha = WebUtils
+                        .getCleanParam(request, ShiroProperties.PARAM_JCAPTCHA);
+                    if (Strings.isNullOrEmpty(jcaptcha)) {
+                        return onJcaptchaFailure(request, response,
+                            this.messages.getMsgCaptchaEmpty());
+                    }
+                    if (!JCaptchaUtil.validateCaptcha(WebUtils.toHttp(request), jcaptcha)) {
+                        return onJcaptchaFailure(request, response,
+                            this.messages.getMsgCaptchaError());
+                    }
                 }
                 return executeLogin(request, response);
             } else {
@@ -89,44 +97,48 @@ public class JsetsFormAuthenticationFilter extends FormAuthenticationFilter {
         }
     }
 
-	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
+    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject,
+        ServletRequest request,
         ServletResponse response) throws Exception {
-		if (Commons.isAjax(WebUtils.toHttp(request))) {
-			Commons.ajaxSucceed(WebUtils.toHttp(response)
-					, MessageConfig.REST_CODE_AUTH_SUCCEED, MessageConfig.REST_MESSAGE_AUTH_SUCCEED);
-		} else {
-			issueSuccessRedirect(request, response);
-		}
-		return false;
-	}
+        if (Commons.isAjax(WebUtils.toHttp(request))) {
+            Commons.ajaxSucceed(WebUtils.toHttp(response)
+                , MessageConfig.REST_CODE_AUTH_SUCCEED, MessageConfig.REST_MESSAGE_AUTH_SUCCEED);
+        } else {
+            issueSuccessRedirect(request, response);
+        }
+        return false;
+    }
 
-	protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request,
-			ServletResponse response) {
-		if (Commons.isAjax(WebUtils.toHttp(request))) {
-			Commons.ajaxFailed(WebUtils.toHttp(response), HttpServletResponse.SC_UNAUTHORIZED
-									, MessageConfig.REST_CODE_AUTH_LOGIN_ERROR, e.getMessage());
-			return false;// 过滤器链停止
-		}
-		setFailureAttribute(request, e);
-		Commons.setAuthMessage(request,e.getMessage());
-		return true;
-	}
+    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
+        ServletRequest request,
+        ServletResponse response) {
+        if (Commons.isAjax(WebUtils.toHttp(request))) {
+            Commons.ajaxFailed(WebUtils.toHttp(response), HttpServletResponse.SC_UNAUTHORIZED
+                , MessageConfig.REST_CODE_AUTH_LOGIN_ERROR, e.getMessage());
+            return false;// 过滤器链停止
+        }
+        setFailureAttribute(request, e);
+        Commons.setAuthMessage(request, e.getMessage());
+        return true;
+    }
 
-	protected boolean onJcaptchaFailure(ServletRequest request, ServletResponse response,String message) {
-		if (Commons.isAjax(WebUtils.toHttp(request))) {
-			Commons.ajaxFailed(WebUtils.toHttp(response), HttpServletResponse.SC_UNAUTHORIZED
-											, MessageConfig.REST_CODE_AUTH_LOGIN_ERROR, message);
-			return false;// 过滤器链停止
-		}
-		Commons.setAuthMessage(request,message);
-		return true;
-	}
+    protected boolean onJcaptchaFailure(ServletRequest request, ServletResponse response,
+        String message) {
+        if (Commons.isAjax(WebUtils.toHttp(request))) {
+            Commons.ajaxFailed(WebUtils.toHttp(response), HttpServletResponse.SC_UNAUTHORIZED
+                , MessageConfig.REST_CODE_AUTH_LOGIN_ERROR, message);
+            return false;// 过滤器链停止
+        }
+        Commons.setAuthMessage(request, message);
+        return true;
+    }
 
-	public void setProperties(ShiroProperties properties) {
-		this.properties = properties;
-	}
-	public void setMessages(MessageConfig messages) {
-		this.messages = messages;
-	}
+    public void setProperties(ShiroProperties properties) {
+        this.properties = properties;
+    }
+
+    public void setMessages(MessageConfig messages) {
+        this.messages = messages;
+    }
 
 }

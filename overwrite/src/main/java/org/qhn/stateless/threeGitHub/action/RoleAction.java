@@ -41,48 +41,44 @@ import com.google.common.collect.Lists;
 @RequestMapping("/role")
 public class RoleAction {
 
-	@Autowired
-	private RoleService roleService;
-	@Autowired
-	private ResourceService resourceService;
-	@Autowired
-	private RoleResourceService roleResourceService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private ResourceService resourceService;
+    @Autowired
+    private RoleResourceService roleResourceService;
 
     @RequestMapping("/list")
     public String list(Model model) {
-    	model.addAttribute("roles", roleService.list());
+        model.addAttribute("roles", roleService.list());
         return "role/role_list";
     }
 
     /**
-     *
      * 为角色分配资源
-     *
      */
     @RequestMapping("/allot_resource")
-    public String allotResource(@RequestParam(name="roleId") String roleId,Model model) {
-    	model.addAttribute("roleId", roleId);
-    	model.addAttribute("resources", resourceService.list());
-    	List<String> selecteds = Lists.newArrayList();
-    	for(ResourceEntity resource:roleResourceService.listResourceByRole(roleId)){
-    		selecteds.add(resource.getId());
-    	}
-    	model.addAttribute("selecteds", selecteds);
+    public String allotResource(@RequestParam(name = "roleId") String roleId, Model model) {
+        model.addAttribute("roleId", roleId);
+        model.addAttribute("resources", resourceService.list());
+        List<String> selecteds = Lists.newArrayList();
+        for (ResourceEntity resource : roleResourceService.listResourceByRole(roleId)) {
+            selecteds.add(resource.getId());
+        }
+        model.addAttribute("selecteds", selecteds);
         return "role/allot_resource";
     }
 
     /**
-     *
      * 保存 角色--资源
-     *
      */
     @RequestMapping("/save_role_resource")
     public @ResponseBody
-	BaseResponse saveResource(@RequestParam(name="roleId") String roleId,
-    											   @RequestParam(name="resourceIds") String resourceIds) {
+    BaseResponse saveResource(@RequestParam(name = "roleId") String roleId,
+        @RequestParam(name = "resourceIds") String resourceIds) {
 
-    	this.roleResourceService.save(roleId, resourceIds);
-    	return BaseResponse.ok().message("资源分配成功");
+        this.roleResourceService.save(roleId, resourceIds);
+        return BaseResponse.ok().message("资源分配成功");
     }
 
 }

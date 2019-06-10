@@ -38,63 +38,68 @@ import org.qhn.stateless.threeGitHub.util.Commons;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
  */
-public class JwtRealm extends AuthorizingRealm{
+public class JwtRealm extends AuthorizingRealm {
 
-	private MessageConfig messages;
+    private MessageConfig messages;
 
-	public Class<?> getAuthenticationTokenClass() {
-		return JwtToken.class;
-	}
+    public Class<?> getAuthenticationTokenClass() {
+        return JwtToken.class;
+    }
 
-	/**
-	 *  认证
-	 */
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		// 只认证JwtToken
-		if(!(token instanceof JwtToken)) return null;
-		String jwt = ((JwtToken)token).getJwt();
-		String payload = null;
-		try{
-			// 预先解析Payload
-			// 没有做任何的签名校验
-			 payload = Commons.parseJwtPayload(jwt);
-		} catch(MalformedJwtException e){
-			throw new AuthenticationException(this.messages.getMsgJwtMalformed());
-		} catch(Exception e){
-			throw new AuthenticationException(this.messages.getMsgJwtError());
-		}
-		if(null == payload){
-			throw new AuthenticationException(this.messages.getMsgJwtError());
-		}
-		return new SimpleAuthenticationInfo("jwt:"+payload,jwt,this.getName());
-	}
+    /**
+     * 认证
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+        throws AuthenticationException {
+        // 只认证JwtToken
+        if (!(token instanceof JwtToken)) {
+            return null;
+        }
+        String jwt = ((JwtToken) token).getJwt();
+        String payload = null;
+        try {
+            // 预先解析Payload
+            // 没有做任何的签名校验
+            payload = Commons.parseJwtPayload(jwt);
+        } catch (MalformedJwtException e) {
+            throw new AuthenticationException(this.messages.getMsgJwtMalformed());
+        } catch (Exception e) {
+            throw new AuthenticationException(this.messages.getMsgJwtError());
+        }
+        if (null == payload) {
+            throw new AuthenticationException(this.messages.getMsgJwtError());
+        }
+        return new SimpleAuthenticationInfo("jwt:" + payload, jwt, this.getName());
+    }
 
-	/**
+    /**
      * 授权
      */
-	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
-		String payload = (String) principals.getPrimaryPrincipal();
-		// likely to be json, parse it:
-		if (payload.startsWith("jwt:") && payload.charAt(4) == '{'
-									   && payload.charAt(payload.length() - 1) == '}') {
+        String payload = (String) principals.getPrimaryPrincipal();
+        // likely to be json, parse it:
+        if (payload.startsWith("jwt:") && payload.charAt(4) == '{'
+            && payload.charAt(payload.length() - 1) == '}') {
 
             Map<String, Object> payloadMap = Commons.readValue(payload.substring(4));
-    		Set<String> roles = Commons.split((String)payloadMap.get("roles"));
-    		Set<String> permissions = Commons.split((String)payloadMap.get("perms"));
-    		SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
-    		if(null!=roles&&!roles.isEmpty())
-    			info.setRoles(roles);
-    		if(null!=permissions&&!permissions.isEmpty())
-    			info.setStringPermissions(permissions);
-    		 return info;
+            Set<String> roles = Commons.split((String) payloadMap.get("roles"));
+            Set<String> permissions = Commons.split((String) payloadMap.get("perms"));
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            if (null != roles && !roles.isEmpty()) {
+                info.setRoles(roles);
+            }
+            if (null != permissions && !permissions.isEmpty()) {
+                info.setStringPermissions(permissions);
+            }
+            return info;
         }
         return null;
-	}
+    }
 
-	public void setMessages(MessageConfig messages) {
-		this.messages = messages;
-	}
+    public void setMessages(MessageConfig messages) {
+        this.messages = messages;
+    }
 }

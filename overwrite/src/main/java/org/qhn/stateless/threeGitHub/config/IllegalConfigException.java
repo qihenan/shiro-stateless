@@ -22,13 +22,12 @@ package org.qhn.stateless.threeGitHub.config;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
-public class IllegalConfigException extends RuntimeException{
+public class IllegalConfigException extends RuntimeException {
 
-	private static final long serialVersionUID = -3380352624906053051L;
+    private static final long serialVersionUID = -3380352624906053051L;
 
-	public IllegalConfigException() {
+    public IllegalConfigException() {
         super();
     }
 

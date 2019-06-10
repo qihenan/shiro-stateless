@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  * 密码错误次数超限处理器实现集成自PasswdRetryLimitHandler
  * 此处演示锁定用户
@@ -42,6 +43,6 @@ public class PasswdRetryLimitHandlerImpl implements PasswdRetryLimitHandler {
     public void handle(String account) {
         //锁定账号
         userService.updateStatus(account, UserEntity.USER_STATUS_LOCKED);
-        LOGGER.warn("账号："+account+"密码错误超过5次，已锁定");
+        LOGGER.warn("账号：" + account + "密码错误超过5次，已锁定");
     }
 }

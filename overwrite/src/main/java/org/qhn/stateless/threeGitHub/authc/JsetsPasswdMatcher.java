@@ -35,51 +35,55 @@ import org.qhn.stateless.threeGitHub.service.ShiroCryptoService;
  */
 public class JsetsPasswdMatcher implements CredentialsMatcher {
 
-	private ShiroProperties properties;
-	private MessageConfig messages;
-	private PasswdRetryLimitHandler passwdRetryLimitHandler;
-	private CacheDelegator cacheDelegator;
-	private ShiroCryptoService cryptoService;
+    private ShiroProperties properties;
+    private MessageConfig messages;
+    private PasswdRetryLimitHandler passwdRetryLimitHandler;
+    private CacheDelegator cacheDelegator;
+    private ShiroCryptoService cryptoService;
 
-	@Override
-	public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-		String credentials = String.valueOf((char[]) token.getCredentials());
-		String account = (String) info.getPrincipals().getPrimaryPrincipal();
-		String password = (String) info.getCredentials();
-		String encrypted  = this.cryptoService.password(credentials);
-		if (!password.equals(encrypted)) {
-			int passwdMaxRetries = this.properties.getPasswdMaxRetries();
-			String errorMsg = this.messages.getMsgAccountPasswordError();
-			if (passwdMaxRetries > 0 && null != this.passwdRetryLimitHandler) {
-				errorMsg = this.messages.getMsgPasswordRetryError();
-				int passwdRetries = this.cacheDelegator.incPasswdRetryCount(account);
-				if (passwdRetries >= passwdMaxRetries-1) {
-					this.passwdRetryLimitHandler.handle(account);
-				}
-				int remain = passwdMaxRetries - passwdRetries;
-				errorMsg = errorMsg.replace("{total}", String.valueOf(passwdMaxRetries))
-								   .replace("{remain}", String.valueOf(remain));
-			}
-			throw new AuthenticationException(errorMsg);
-		}
-		this.cacheDelegator.cleanPasswdRetryCount(account);
-		return true;
-	}
+    @Override
+    public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
+        String credentials = String.valueOf((char[]) token.getCredentials());
+        String account = (String) info.getPrincipals().getPrimaryPrincipal();
+        String password = (String) info.getCredentials();
+        String encrypted = this.cryptoService.password(credentials);
+        if (!password.equals(encrypted)) {
+            int passwdMaxRetries = this.properties.getPasswdMaxRetries();
+            String errorMsg = this.messages.getMsgAccountPasswordError();
+            if (passwdMaxRetries > 0 && null != this.passwdRetryLimitHandler) {
+                errorMsg = this.messages.getMsgPasswordRetryError();
+                int passwdRetries = this.cacheDelegator.incPasswdRetryCount(account);
+                if (passwdRetries >= passwdMaxRetries - 1) {
+                    this.passwdRetryLimitHandler.handle(account);
+                }
+                int remain = passwdMaxRetries - passwdRetries;
+                errorMsg = errorMsg.replace("{total}", String.valueOf(passwdMaxRetries))
+                    .replace("{remain}", String.valueOf(remain));
+            }
+            throw new AuthenticationException(errorMsg);
+        }
+        this.cacheDelegator.cleanPasswdRetryCount(account);
+        return true;
+    }
 
-	public void setProperties(ShiroProperties properties) {
-		this.properties = properties;
-	}
-	public void setCacheDelegator(CacheDelegator cacheDelegator) {
-		this.cacheDelegator = cacheDelegator;
-	}
-	public void setCryptoService(ShiroCryptoService cryptoService) {
-		this.cryptoService = cryptoService;
-	}
-	public void setMessages(MessageConfig messages) {
-		this.messages = messages;
-	}
-	public void setPasswdRetryLimitHandler(PasswdRetryLimitHandler passwdRetryLimitHandler) {
-		this.passwdRetryLimitHandler = passwdRetryLimitHandler;
-	}
+    public void setProperties(ShiroProperties properties) {
+        this.properties = properties;
+    }
+
+    public void setCacheDelegator(CacheDelegator cacheDelegator) {
+        this.cacheDelegator = cacheDelegator;
+    }
+
+    public void setCryptoService(ShiroCryptoService cryptoService) {
+        this.cryptoService = cryptoService;
+    }
+
+    public void setMessages(MessageConfig messages) {
+        this.messages = messages;
+    }
+
+    public void setPasswdRetryLimitHandler(PasswdRetryLimitHandler passwdRetryLimitHandler) {
+        this.passwdRetryLimitHandler = passwdRetryLimitHandler;
+    }
 
 }

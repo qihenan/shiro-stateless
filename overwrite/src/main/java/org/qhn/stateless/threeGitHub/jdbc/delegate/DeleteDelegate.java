@@ -22,36 +22,37 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.EntityElement;
 import org.qhn.stateless.threeGitHub.jdbc.util.SqlBuilder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 /**
  * 删除执行器
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class DeleteDelegate extends AbstractDelegate<Integer> {
 
-	private final Class<?> persistentClass;
-	private final Object primaryKeyValue;
-	private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
+    private final Class<?> persistentClass;
+    private final Object primaryKeyValue;
+    private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
 
-	public DeleteDelegate(JdbcTemplate jdbcTemplate,Class<?> persistentClass,Object primaryKeyValue) {
-		super(jdbcTemplate);
-		this.persistentClass = persistentClass;
-		this.primaryKeyValue = primaryKeyValue;
-	}
+    public DeleteDelegate(JdbcTemplate jdbcTemplate, Class<?> persistentClass,
+        Object primaryKeyValue) {
+        super(jdbcTemplate);
+        this.persistentClass = persistentClass;
+        this.primaryKeyValue = primaryKeyValue;
+    }
 
-	@Override
-	public void prepare() {
-		this.checkEntity(this.persistentClass);
-		EntityElement entityElement = ElementResolver.resolve(this.persistentClass);
-		this.sqlBuilder.DELETE_FROM(entityElement.getTable());
-		this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn()+" = ?");
-	}
+    @Override
+    public void prepare() {
+        this.checkEntity(this.persistentClass);
+        EntityElement entityElement = ElementResolver.resolve(this.persistentClass);
+        this.sqlBuilder.DELETE_FROM(entityElement.getTable());
+        this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn() + " = ?");
+    }
 
-	@Override
-	protected Integer doExecute() throws DataAccessException{
-		String sql = this.sqlBuilder.toString().toUpperCase();
-		return this.jdbcTemplate.update(sql,this.primaryKeyValue);
-	}
+    @Override
+    protected Integer doExecute() throws DataAccessException {
+        String sql = this.sqlBuilder.toString().toUpperCase();
+        return this.jdbcTemplate.update(sql, this.primaryKeyValue);
+    }
 }

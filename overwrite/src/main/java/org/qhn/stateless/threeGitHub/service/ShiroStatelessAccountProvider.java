@@ -27,28 +27,36 @@ import org.apache.shiro.authc.AuthenticationException;
  * @date 2016年6月31日
  */
 public interface ShiroStatelessAccountProvider {
-	/**
-	 * 检查账号是否正常
-	 * <br>如果返回false或抛出AuthenticationException则不予通过认证
-	 * @param appId 客户标识
-	 */
-	public boolean checkAccount(String appId) throws AuthenticationException;
-	/**
-	 * 获取客户端的签名私钥
-	 * <br>如果客户端没有私钥返回空，则使用全局秘钥
-	 * @param appId 客户标识
-	 */
-	public String loadAppKey(String appId);
-	/**
-	 * 根据客户标识加载持有角色
-	 * @param appId 客户标识
-	 * @return 角色列表
-	 */
-	public Set<String> loadRoles(String appId);
-	/**
-	 * 根据客户标识加载持有权限
-	 * @param appId 客户标识
-	 * @return 角色列表
-	 */
-	public Set<String> loadPermissions(String appId);
+
+    /**
+     * 检查账号是否正常
+     * <br>如果返回false或抛出AuthenticationException则不予通过认证
+     *
+     * @param appId 客户标识
+     */
+    public boolean checkAccount(String appId) throws AuthenticationException;
+
+    /**
+     * 获取客户端的签名私钥
+     * <br>如果客户端没有私钥返回空，则使用全局秘钥
+     *
+     * @param appId 客户标识
+     */
+    public String loadAppKey(String appId);
+
+    /**
+     * 根据客户标识加载持有角色
+     *
+     * @param appId 客户标识
+     * @return 角色列表
+     */
+    public Set<String> loadRoles(String appId);
+
+    /**
+     * 根据客户标识加载持有权限
+     *
+     * @param appId 客户标识
+     * @return 角色列表
+     */
+    public Set<String> loadPermissions(String appId);
 }

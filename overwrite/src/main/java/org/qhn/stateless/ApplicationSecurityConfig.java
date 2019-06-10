@@ -32,30 +32,29 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年8月05日
- *
  */
 @Configuration
 public class ApplicationSecurityConfig extends JsetsShiroConfigurationAdapter {
 
-	// 账号信息提供者
-	@Autowired
-	private AccountProviderImpl accountProviderImpl;
-	// 密码输入错误次数超限处理器
-	@Autowired
-	private PasswdRetryLimitHandlerImpl passwdRetryLimitHandlerImpl;
-	// 动态URL过滤规则
-	@Autowired
-	private FilteRulesProviderImpl filteRulesProviderImpl;
+    // 账号信息提供者
+    @Autowired
+    private AccountProviderImpl accountProviderImpl;
+    // 密码输入错误次数超限处理器
+    @Autowired
+    private PasswdRetryLimitHandlerImpl passwdRetryLimitHandlerImpl;
+    // 动态URL过滤规则
+    @Autowired
+    private FilteRulesProviderImpl filteRulesProviderImpl;
 
-	@Override
-	protected void configure(SecurityManagerConfig securityManager) {
-		securityManager.setAccountProvider(accountProviderImpl);
-		securityManager.setPasswdRetryLimitHandler(passwdRetryLimitHandlerImpl);
-	}
+    @Override
+    protected void configure(SecurityManagerConfig securityManager) {
+        securityManager.setAccountProvider(accountProviderImpl);
+        securityManager.setPasswdRetryLimitHandler(passwdRetryLimitHandlerImpl);
+    }
 
-	@Override
-	protected void configure(FilterChainConfig filterChain) {
-		filterChain.setShiroFilteRulesProvider(filteRulesProviderImpl);
-	}
+    @Override
+    protected void configure(FilterChainConfig filterChain) {
+        filterChain.setShiroFilteRulesProvider(filteRulesProviderImpl);
+    }
 
 }

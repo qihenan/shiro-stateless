@@ -25,6 +25,7 @@ import org.qhn.stateless.threeGitHub.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Sets;
+
 /**
  * 账号信息提供者实现
  *
@@ -34,44 +35,43 @@ import com.google.common.collect.Sets;
 @Service
 public class AccountProviderImpl implements ShiroAccountProvider {
 
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private UserRoleService userRoleService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
 
-	@Override
-	public Account loadAccount(String account) throws AuthenticationException {
-		UserEntity user = userService.getByAccount(account);
-		// 用户不存在
-		if(null == user){
-			throw new AuthenticationException("账号或密码错误");
-		}
-		// 对账号做检查
-		// 当账号异常，如账号被锁定、被禁用等等需要限制登陆，直接抛出AuthenticationException即可
-		if(UserEntity.USER_STATUS_LOCKED == user.getStatus()){
-			throw new AuthenticationException("账号已被锁定，请联系系统管理员");
-		}
-		return user;
-	}
-
-
-	/**
-	 * 加载用户持有的角色
-	 */
-	@Override
-	public Set<String> loadRoles(String account) {
-		return Sets.newHashSet(userRoleService.listUserRoles(account));
-	}
+    @Override
+    public Account loadAccount(String account) throws AuthenticationException {
+        UserEntity user = userService.getByAccount(account);
+        // 用户不存在
+        if (null == user) {
+            throw new AuthenticationException("账号或密码错误");
+        }
+        // 对账号做检查
+        // 当账号异常，如账号被锁定、被禁用等等需要限制登陆，直接抛出AuthenticationException即可
+        if (UserEntity.USER_STATUS_LOCKED == user.getStatus()) {
+            throw new AuthenticationException("账号已被锁定，请联系系统管理员");
+        }
+        return user;
+    }
 
 
-	/**
-	 *
-	 * 系统采用  基于角色的权限访问控制(RBAC)策略
-	 * 所谓的权限通常可以理解为用户所能操作的资源，如（user:add、user:delete）
-	 * 此方法未实现
-	 */
-	@Override
-	public Set<String> loadPermissions(String account) {
-		return null;
-	}
+    /**
+     * 加载用户持有的角色
+     */
+    @Override
+    public Set<String> loadRoles(String account) {
+        return Sets.newHashSet(userRoleService.listUserRoles(account));
+    }
+
+
+    /**
+     * 系统采用  基于角色的权限访问控制(RBAC)策略
+     * 所谓的权限通常可以理解为用户所能操作的资源，如（user:add、user:delete）
+     * 此方法未实现
+     */
+    @Override
+    public Set<String> loadPermissions(String account) {
+        return null;
+    }
 }

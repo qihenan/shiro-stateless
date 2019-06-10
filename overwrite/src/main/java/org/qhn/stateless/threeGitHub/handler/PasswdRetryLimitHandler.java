@@ -16,6 +16,7 @@
  * </p>
  */
 package org.qhn.stateless.threeGitHub.handler;
+
 /**
  * 密码连续错误次数超限处理器接口
  *
@@ -24,6 +25,6 @@ package org.qhn.stateless.threeGitHub.handler;
  */
 public interface PasswdRetryLimitHandler {
 
-	public void handle(String account);
+    public void handle(String account);
 
 }

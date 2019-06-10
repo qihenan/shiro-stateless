@@ -40,55 +40,60 @@ import org.qhn.stateless.threeGitHub.util.Commons;
  */
 public class JsetsJwtMatcher implements CredentialsMatcher {
 
-	private ShiroProperties properties;
-	private MessageConfig messages;
-	private ShiroCryptoService cryptoService;
-	private ShiroStatelessAccountProvider accountProvider;
-	private CacheDelegator cacheDelegator;
+    private ShiroProperties properties;
+    private MessageConfig messages;
+    private ShiroCryptoService cryptoService;
+    private ShiroStatelessAccountProvider accountProvider;
+    private CacheDelegator cacheDelegator;
 
-	@Override
-	public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-		String jwt = (String) info.getCredentials();
-		StatelessLogined statelessAccount = null;
-		try{
-			if(Commons.hasLen(this.properties.getJwtSecretKey())){
-				statelessAccount = this.cryptoService.parseJwt(jwt);
-			} else {
-				String appId = (String) Commons.readValue(Commons.parseJwtPayload(jwt)).get("subject");
-				String appKey = accountProvider.loadAppKey(appId);
-				if(Strings.isNullOrEmpty(appKey))
-					throw new AuthenticationException(MessageConfig.MSG_NO_SECRET_KEY);
-				statelessAccount = this.cryptoService.parseJwt(jwt,appKey);
-			}
+    @Override
+    public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
+        String jwt = (String) info.getCredentials();
+        StatelessLogined statelessAccount = null;
+        try {
+            if (Commons.hasLen(this.properties.getJwtSecretKey())) {
+                statelessAccount = this.cryptoService.parseJwt(jwt);
+            } else {
+                String appId = (String) Commons.readValue(Commons.parseJwtPayload(jwt))
+                    .get("subject");
+                String appKey = accountProvider.loadAppKey(appId);
+                if (Strings.isNullOrEmpty(appKey)) {
+                    throw new AuthenticationException(MessageConfig.MSG_NO_SECRET_KEY);
+                }
+                statelessAccount = this.cryptoService.parseJwt(jwt, appKey);
+            }
 
-		} catch(SignatureException e){
-			throw new AuthenticationException(this.properties.getJwtSecretKey());
-		} catch(ExpiredJwtException e){
-			throw new AuthenticationException(this.messages.getMsgJwtTimeout());
-		} catch(Exception e){
-			throw new AuthenticationException(this.messages.getMsgJwtError());
-		}
-		if(null == statelessAccount){
-			throw new AuthenticationException(this.messages.getMsgJwtError());
-		}
-		String tokenId = statelessAccount.getTokenId();
-		if(this.properties.isJwtBurnEnabled()
-				&&this.cacheDelegator.cutBurnedToken(tokenId)){
-			throw new AuthenticationException(MessageConfig.MSG_BURNED_TOKEN);
-		}
+        } catch (SignatureException e) {
+            throw new AuthenticationException(this.properties.getJwtSecretKey());
+        } catch (ExpiredJwtException e) {
+            throw new AuthenticationException(this.messages.getMsgJwtTimeout());
+        } catch (Exception e) {
+            throw new AuthenticationException(this.messages.getMsgJwtError());
+        }
+        if (null == statelessAccount) {
+            throw new AuthenticationException(this.messages.getMsgJwtError());
+        }
+        String tokenId = statelessAccount.getTokenId();
+        if (this.properties.isJwtBurnEnabled()
+            && this.cacheDelegator.cutBurnedToken(tokenId)) {
+            throw new AuthenticationException(MessageConfig.MSG_BURNED_TOKEN);
+        }
         return true;
-	}
+    }
 
-	public void setProperties(ShiroProperties properties) {
-		this.properties = properties;
-	}
-	public void setCryptoService(ShiroCryptoService cryptoService) {
-		this.cryptoService = cryptoService;
-	}
-	public void setMessages(MessageConfig messages) {
-		this.messages = messages;
-	}
-	public void setCacheDelegator(CacheDelegator cacheDelegator) {
-		this.cacheDelegator = cacheDelegator;
-	}
+    public void setProperties(ShiroProperties properties) {
+        this.properties = properties;
+    }
+
+    public void setCryptoService(ShiroCryptoService cryptoService) {
+        this.cryptoService = cryptoService;
+    }
+
+    public void setMessages(MessageConfig messages) {
+        this.messages = messages;
+    }
+
+    public void setCacheDelegator(CacheDelegator cacheDelegator) {
+        this.cacheDelegator = cacheDelegator;
+    }
 }

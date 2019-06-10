@@ -28,24 +28,27 @@ import org.qhn.stateless.threeGitHub.domain.BaseEntity;
  * @date 2016年9月15日
  */
 @Entity
-@Table(name="t_role_resource")
+@Table(name = "t_role_resource")
 public class RoleResourceEntity extends BaseEntity {
 
-	private static final long serialVersionUID = -6107572732501386464L;
+    private static final long serialVersionUID = -6107572732501386464L;
 
-	private String roleId;
-	private String resourceId;
+    private String roleId;
+    private String resourceId;
 
-	public String getRoleId() {
-		return roleId;
-	}
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
-	}
-	public String getResourceId() {
-		return resourceId;
-	}
-	public void setResourceId(String resourceId) {
-		this.resourceId = resourceId;
-	}
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
 }

@@ -30,36 +30,40 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class GetDelegate<T> extends AbstractDelegate<T> {
 
-	private final Class<?> persistentClass;
-	private final Object primaryKeyValue;
-	private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
-	private EntityElement entityElement;
+    private final Class<?> persistentClass;
+    private final Object primaryKeyValue;
+    private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
+    private EntityElement entityElement;
 
-	public GetDelegate(JdbcTemplate jdbcTemplate,Class<?> persistentClass,Object primaryKeyValue) {
-		super(jdbcTemplate);
-		this.persistentClass = persistentClass;
-		this.primaryKeyValue = primaryKeyValue;
-	}
+    public GetDelegate(JdbcTemplate jdbcTemplate, Class<?> persistentClass,
+        Object primaryKeyValue) {
+        super(jdbcTemplate);
+        this.persistentClass = persistentClass;
+        this.primaryKeyValue = primaryKeyValue;
+    }
 
-	@Override
-	public void prepare() {
-		this.checkEntity(this.persistentClass);
-		this.entityElement = ElementResolver.resolve(this.persistentClass);
-		this.sqlBuilder.FROM(entityElement.getTable());
-		for (FieldElement fieldElement: entityElement.getFieldElements().values()) {
-			if(fieldElement.isTransientField()) continue;
-			this.sqlBuilder.SELECT(fieldElement.getColumn());
-		}
-		this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn() + " = ?");
-	}
+    @Override
+    public void prepare() {
+        this.checkEntity(this.persistentClass);
+        this.entityElement = ElementResolver.resolve(this.persistentClass);
+        this.sqlBuilder.FROM(entityElement.getTable());
+        for (FieldElement fieldElement : entityElement.getFieldElements().values()) {
+            if (fieldElement.isTransientField()) {
+                continue;
+            }
+            this.sqlBuilder.SELECT(fieldElement.getColumn());
+        }
+        this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn() + " = ?");
+    }
 
-	@Override
-	protected T doExecute() throws DataAccessException{
-		String sql = this.sqlBuilder.toString().toUpperCase();
-		return this.jdbcTemplate.queryForObject(sql,new EntityRowMapper<T>(this.LOBHANDLER,this.entityElement,this.persistentClass),this.primaryKeyValue);
-	}
+    @Override
+    protected T doExecute() throws DataAccessException {
+        String sql = this.sqlBuilder.toString().toUpperCase();
+        return this.jdbcTemplate.queryForObject(sql,
+            new EntityRowMapper<T>(this.LOBHANDLER, this.entityElement, this.persistentClass),
+            this.primaryKeyValue);
+    }
 }

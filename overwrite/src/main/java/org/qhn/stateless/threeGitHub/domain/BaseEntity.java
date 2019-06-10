@@ -29,18 +29,18 @@ import javax.persistence.MappedSuperclass;
  * @date 2016年9月15日
  */
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable{
+public abstract class BaseEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue
-	private String id;// 主键 uuid
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue
+    private String id;// 主键 uuid
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 }

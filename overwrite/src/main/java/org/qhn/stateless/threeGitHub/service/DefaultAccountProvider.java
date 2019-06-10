@@ -32,30 +32,32 @@ import org.qhn.stateless.threeGitHub.model.DefaultAccount;
  */
 public class DefaultAccountProvider implements ShiroAccountProvider {
 
-	private ShiroCryptoService shiroCryptoService;
+    private ShiroCryptoService shiroCryptoService;
 
-	public static final String DEFAULT_ACCOUNT = "test";
-	public static final String DEFAULT_ROLES = "testRole";
-	public static final String DEFAULT_PERMS = "testPerm";
+    public static final String DEFAULT_ACCOUNT = "test";
+    public static final String DEFAULT_ROLES = "testRole";
+    public static final String DEFAULT_PERMS = "testPerm";
 
-	@Override
-	public Account loadAccount(String account) throws AuthenticationException {
-		if(!DEFAULT_ACCOUNT.equals(account)) throw new AuthenticationException("用户名或密码错误");
-		return new DefaultAccount(account,this.shiroCryptoService.password(DEFAULT_ACCOUNT));
-	}
+    @Override
+    public Account loadAccount(String account) throws AuthenticationException {
+        if (!DEFAULT_ACCOUNT.equals(account)) {
+            throw new AuthenticationException("用户名或密码错误");
+        }
+        return new DefaultAccount(account, this.shiroCryptoService.password(DEFAULT_ACCOUNT));
+    }
 
-	@Override
-	public Set<String> loadRoles(String account) {
-		return Sets.newHashSet(Arrays.asList(DEFAULT_ROLES));
-	}
+    @Override
+    public Set<String> loadRoles(String account) {
+        return Sets.newHashSet(Arrays.asList(DEFAULT_ROLES));
+    }
 
-	@Override
-	public Set<String> loadPermissions(String account) {
-		return Sets.newHashSet(Arrays.asList(DEFAULT_PERMS));
-	}
+    @Override
+    public Set<String> loadPermissions(String account) {
+        return Sets.newHashSet(Arrays.asList(DEFAULT_PERMS));
+    }
 
-	public void setShiroCryptoService(ShiroCryptoService shiroCryptoService) {
-		this.shiroCryptoService = shiroCryptoService;
-	}
+    public void setShiroCryptoService(ShiroCryptoService shiroCryptoService) {
+        this.shiroCryptoService = shiroCryptoService;
+    }
 
 }

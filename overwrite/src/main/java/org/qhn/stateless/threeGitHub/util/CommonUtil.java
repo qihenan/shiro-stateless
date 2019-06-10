@@ -32,42 +32,46 @@ import com.google.common.collect.Sets;
  */
 public abstract class CommonUtil {
 
-	/**
-	 * 现在-日期类型
-	 */
-	public static Date nowDate() {
-		return new Date();
-	}
+    /**
+     * 现在-日期类型
+     */
+    public static Date nowDate() {
+        return new Date();
+    }
 
 
-	/**
-	 * 分割字符串进SET
-	 */
-	public static Set<String> split(String str) {
-		return split(str, ",");
-	}
+    /**
+     * 分割字符串进SET
+     */
+    public static Set<String> split(String str) {
+        return split(str, ",");
+    }
 
-	/**
-	 * 分割字符串进SET
-	 */
-	public static Set<String> split(String str, String separator) {
-		Set<String> set = Sets.newLinkedHashSet();
-		if (Strings.isNullOrEmpty(str))
-			return set;
-		for (String s : str.split(separator)) {
-			set.add(s);
-		}
-		return set;
-	}
-	/**
-	 * 逗号连接字符串
-	 */
-	public static String join(Collection<String> strs) {
-		StringBuilder sb = new StringBuilder();
-		for(String str:strs){
-			if(sb.length()>0) sb.append(",");
-			sb.append(str);
-		}
-		return sb.toString();
-	}
+    /**
+     * 分割字符串进SET
+     */
+    public static Set<String> split(String str, String separator) {
+        Set<String> set = Sets.newLinkedHashSet();
+        if (Strings.isNullOrEmpty(str)) {
+            return set;
+        }
+        for (String s : str.split(separator)) {
+            set.add(s);
+        }
+        return set;
+    }
+
+    /**
+     * 逗号连接字符串
+     */
+    public static String join(Collection<String> strs) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : strs) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(str);
+        }
+        return sb.toString();
+    }
 }

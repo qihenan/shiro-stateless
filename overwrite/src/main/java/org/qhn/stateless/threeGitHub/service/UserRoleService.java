@@ -27,32 +27,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserRoleService {
 
-	@Autowired
-	private JdbcEnhance jdbcEnhance;
+    @Autowired
+    private JdbcEnhance jdbcEnhance;
 
 
-	public int save(UserRoleEntity userRole){
-		return jdbcEnhance.insert(userRole);
-	}
+    public int save(UserRoleEntity userRole) {
+        return jdbcEnhance.insert(userRole);
+    }
 
-	public int deleteByUser(String userId){
-		return jdbcEnhance.delete(SqlBuilder
-					.BUILD()
-					.DELETE_FROM("T_USER_ROLE")
-					.WHERE("USER_ID = ?")
-				, userId);
-	}
+    public int deleteByUser(String userId) {
+        return jdbcEnhance.delete(SqlBuilder
+                .BUILD()
+                .DELETE_FROM("T_USER_ROLE")
+                .WHERE("USER_ID = ?")
+            , userId);
+    }
 
-	public List<String> listUserRoles(String account){
-		return jdbcEnhance
-				.getJdbcTemplate()
-				.queryForList(SqlBuilder
-						.BUILD()
-						.SELECT("T.ROLE_ID")
-						.FROM("T_USER_ROLE T")
-						.JOIN("T_USER U ON T.USER_ID = U.ID")
-						.WHERE("U.ACCOUNT = ?").toString()
-				, String.class, account);
+    public List<String> listUserRoles(String account) {
+        return jdbcEnhance
+            .getJdbcTemplate()
+            .queryForList(SqlBuilder
+                    .BUILD()
+                    .SELECT("T.ROLE_ID")
+                    .FROM("T_USER_ROLE T")
+                    .JOIN("T_USER U ON T.USER_ID = U.ID")
+                    .WHERE("U.ACCOUNT = ?").toString()
+                , String.class, account);
 
-	}
+    }
 }

@@ -29,20 +29,24 @@ import org.apache.shiro.util.CollectionUtils;
  * <br>修改了匹配逻辑，只要当前用户有一个角色满足URL所需角色就放行
  *
  * author wangjie (https://github.com/wj596)
+ *
  * @date 2016年6月31日
  */
-public class JsetsRolesAuthorizationFilter extends JsetsAuthorizationFilter{
+public class JsetsRolesAuthorizationFilter extends JsetsAuthorizationFilter {
 
-    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
-    	Subject subject = getSubject(request, response);
+    public boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) throws IOException {
+        Subject subject = getSubject(request, response);
         String[] rolesArray = (String[]) mappedValue;
         if (rolesArray == null || rolesArray.length == 0) {
-        	return true;
+            return true;
         }
         List<String> roles = CollectionUtils.asList(rolesArray);
         boolean[] hasRoles = subject.hasRoles(roles);
-        for(boolean hasRole:hasRoles){
-        	if(hasRole) return true;
+        for (boolean hasRole : hasRoles) {
+            if (hasRole) {
+                return true;
+            }
         }
         return false;
     }

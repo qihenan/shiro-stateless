@@ -32,36 +32,38 @@ import org.qhn.stateless.threeGitHub.util.Commons;
  * 抽象权限过滤器,扩展自AuthorizationFilter增加了针对ajax请求的处理。
  *
  * author wangjie (https://github.com/wj596)
+ *
  * @date 2016年6月31日
  */
-public abstract class JsetsAuthorizationFilter extends AuthorizationFilter{
+public abstract class JsetsAuthorizationFilter extends AuthorizationFilter {
 
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
+        throws IOException {
         Subject subject = getSubject(request, response);
         //未认证
         if (null == subject.getPrincipal()) {
-    		if (Commons.isAjax(WebUtils.toHttp(request))) {
-    			Commons.ajaxFailed(WebUtils.toHttp(response)
-    					, HttpServletResponse.SC_UNAUTHORIZED
-    					, MessageConfig.REST_CODE_AUTH_UNAUTHORIZED
-    					,MessageConfig.REST_MESSAGE_AUTH_UNAUTHORIZED);
-    		}
+            if (Commons.isAjax(WebUtils.toHttp(request))) {
+                Commons.ajaxFailed(WebUtils.toHttp(response)
+                    , HttpServletResponse.SC_UNAUTHORIZED
+                    , MessageConfig.REST_CODE_AUTH_UNAUTHORIZED
+                    , MessageConfig.REST_MESSAGE_AUTH_UNAUTHORIZED);
+            }
             saveRequestAndRedirectToLogin(request, response);
-        //未授权
+            //未授权
         } else {
-    		if (Commons.isAjax(WebUtils.toHttp(request))) {
-    			Commons.ajaxFailed(WebUtils.toHttp(response)
-    					, HttpServletResponse.SC_FORBIDDEN
-    					,MessageConfig.REST_CODE_AUTH_FORBIDDEN
-    					,MessageConfig.REST_MESSAGE_AUTH_FORBIDDEN);
-    		}else{
+            if (Commons.isAjax(WebUtils.toHttp(request))) {
+                Commons.ajaxFailed(WebUtils.toHttp(response)
+                    , HttpServletResponse.SC_FORBIDDEN
+                    , MessageConfig.REST_CODE_AUTH_FORBIDDEN
+                    , MessageConfig.REST_MESSAGE_AUTH_FORBIDDEN);
+            } else {
                 String unauthorizedUrl = getUnauthorizedUrl();
                 if (StringUtils.hasText(unauthorizedUrl)) {
                     WebUtils.issueRedirect(request, response, unauthorizedUrl);
                 } else {
                     WebUtils.toHttp(response).sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
-    		}
+            }
         }
         return false;
     }

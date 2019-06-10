@@ -25,10 +25,9 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.Element;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public interface Resolver {
 
-	public void resolve(Element element, Annotation annotation);
+    public void resolve(Element element, Annotation annotation);
 
 }

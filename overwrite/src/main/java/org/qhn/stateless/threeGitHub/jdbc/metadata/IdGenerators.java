@@ -22,8 +22,8 @@ package org.qhn.stateless.threeGitHub.jdbc.metadata;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class IdGenerators {
-	public static final String UUID = "uuid";
+
+    public static final String UUID = "uuid";
 }

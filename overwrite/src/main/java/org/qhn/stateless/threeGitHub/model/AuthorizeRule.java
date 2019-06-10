@@ -20,29 +20,29 @@ package org.qhn.stateless.threeGitHub.model;
 import java.io.Serializable;
 
 /**
- *
  * 权限验证规则
+ *
  * @author wangjie
  * @date 2016年6月31日
- *
  */
-public abstract class AuthorizeRule implements Serializable{
+public abstract class AuthorizeRule implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final short RULE_TYPE_DEF = 1;
-	public static final short RULE_TYPE_HMAC = 2;
-	public static final short RULE_TYPE_JWT = 3;
-	public static final short RULE_TYPE_CUSTOM = 4;
+    public static final short RULE_TYPE_DEF = 1;
+    public static final short RULE_TYPE_HMAC = 2;
+    public static final short RULE_TYPE_JWT = 3;
+    public static final short RULE_TYPE_CUSTOM = 4;
 
-	private short type;// 规则类型
+    private short type;// 规则类型
 
-	public short getType() {
-		return type;
-	}
-	public void setType(short type) {
-		this.type = type;
-	}
+    public short getType() {
+        return type;
+    }
 
-	public abstract StringBuilder toFilterChain();
+    public void setType(short type) {
+        this.type = type;
+    }
+
+    public abstract StringBuilder toFilterChain();
 }

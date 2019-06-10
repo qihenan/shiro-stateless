@@ -28,33 +28,33 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class CountDelegate extends AbstractDelegate<Integer> {
 
-	private final String sql;
-	private final Object[] parameters;
-	private String querySql;
+    private final String sql;
+    private final Object[] parameters;
+    private String querySql;
 
-	public CountDelegate(JdbcTemplate jdbcTemplate,String sql,Object[] parameters) {
-		super(jdbcTemplate);
-		this.sql = sql;
-		this.parameters = parameters;
-	}
+    public CountDelegate(JdbcTemplate jdbcTemplate, String sql, Object[] parameters) {
+        super(jdbcTemplate);
+        this.sql = sql;
+        this.parameters = parameters;
+    }
 
-	@Override
-	public void prepare() {
-		if (!this.sql.startsWith("SELECT COUNT")){
-			String countRexp = "(?i)^select (?:(?!select|from)[\\s\\S])*(\\(select (?:(?!from)[\\s\\S])* from [^\\)]*\\)(?:(?!select|from)[^\\(])*)*from";
-			String replacement = "SELECT COUNT(1) AS COUNT FROM";
-			this.querySql = this.sql.replaceFirst(countRexp, replacement);
-		} else {
-			this.querySql = this.sql;
-		}
-	}
+    @Override
+    public void prepare() {
+        if (!this.sql.startsWith("SELECT COUNT")) {
+            String countRexp = "(?i)^select (?:(?!select|from)[\\s\\S])*(\\(select (?:(?!from)[\\s\\S])* from [^\\)]*\\)(?:(?!select|from)[^\\(])*)*from";
+            String replacement = "SELECT COUNT(1) AS COUNT FROM";
+            this.querySql = this.sql.replaceFirst(countRexp, replacement);
+        } else {
+            this.querySql = this.sql;
+        }
+    }
 
-	@Override
-	protected Integer doExecute() throws DataAccessException{
-		if(null==this.parameters||this.parameters.length==0){
-			return this.jdbcTemplate.queryForObject(this.querySql,Integer.class);
-		} else {
-			return this.jdbcTemplate.queryForObject(this.querySql, this.parameters,Integer.class);
-		}
-	}
+    @Override
+    protected Integer doExecute() throws DataAccessException {
+        if (null == this.parameters || this.parameters.length == 0) {
+            return this.jdbcTemplate.queryForObject(this.querySql, Integer.class);
+        } else {
+            return this.jdbcTemplate.queryForObject(this.querySql, this.parameters, Integer.class);
+        }
+    }
 }

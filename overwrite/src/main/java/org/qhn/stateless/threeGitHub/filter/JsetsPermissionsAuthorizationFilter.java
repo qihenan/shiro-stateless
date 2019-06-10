@@ -26,11 +26,13 @@ import org.apache.shiro.subject.Subject;
  * 重写PermissionsAuthorizationFilter，使其继承自JsetsAuthorizationFilter
  *
  * author wangjie (https://github.com/wj596)
+ *
  * @date 2016年6月31日
  */
-public class JsetsPermissionsAuthorizationFilter extends JsetsAuthorizationFilter{
+public class JsetsPermissionsAuthorizationFilter extends JsetsAuthorizationFilter {
 
-    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
+    public boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) throws IOException {
         Subject subject = getSubject(request, response);
         String[] perms = (String[]) mappedValue;
         boolean isPermitted = true;

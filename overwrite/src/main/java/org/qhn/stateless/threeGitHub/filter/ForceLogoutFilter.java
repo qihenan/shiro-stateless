@@ -29,34 +29,36 @@ import org.slf4j.LoggerFactory;
  * 强制用户下线过滤器
  *
  * author wangjie (https://github.com/wj596)
- * @date 2016年6月31日
  *
+ * @date 2016年6月31日
  */
 public class ForceLogoutFilter extends JsetsAccessControlFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ForceLogoutFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForceLogoutFilter.class);
 
-	private ShiroProperties properties;
+    private ShiroProperties properties;
 
-	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-		return false;
-	}
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) throws Exception {
+        return false;
+    }
 
-	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		Subject subject = getSubject(request, response);
-		if (!subject.isAuthenticated() && !subject.isRemembered()) {
-			return this.respondLogin(request, response);
-		}
-		Session currentSession = subject.getSession();
-        if (null!=currentSession.getAttribute(ShiroProperties.ATTRIBUTE_SESSION_FORCE_LOGOUT)) {
-        	subject.logout();
-			return this.respondRedirect(request, response,this.properties.getForceLogoutUrl());
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
+        throws Exception {
+        Subject subject = getSubject(request, response);
+        if (!subject.isAuthenticated() && !subject.isRemembered()) {
+            return this.respondLogin(request, response);
+        }
+        Session currentSession = subject.getSession();
+        if (null != currentSession.getAttribute(ShiroProperties.ATTRIBUTE_SESSION_FORCE_LOGOUT)) {
+            subject.logout();
+            return this.respondRedirect(request, response, this.properties.getForceLogoutUrl());
         }
         return true;
-	}
+    }
 
-	public void setProperties(ShiroProperties properties) {
-		this.properties = properties;
-	}
+    public void setProperties(ShiroProperties properties) {
+        this.properties = properties;
+    }
 }

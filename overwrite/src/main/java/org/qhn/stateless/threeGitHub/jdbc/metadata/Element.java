@@ -24,8 +24,7 @@ import java.io.Serializable;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public interface Element extends Serializable{
+public interface Element extends Serializable {
 
 }

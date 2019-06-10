@@ -23,42 +23,48 @@ package org.qhn.stateless.threeGitHub.jdbc.metadata;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
  */
-public class ValueElement implements Element{
+public class ValueElement implements Element {
 
-	private static final long serialVersionUID = 5769556940509335112L;
+    private static final long serialVersionUID = 5769556940509335112L;
 
-	private Object value;
-	private boolean clob;
-	private boolean blob;
+    private Object value;
+    private boolean clob;
+    private boolean blob;
 
-	public ValueElement(){}
+    public ValueElement() {
+    }
 
-	public ValueElement(Object value){
-		this.value = value;
-	}
+    public ValueElement(Object value) {
+        this.value = value;
+    }
 
-	public ValueElement(Object value,boolean clob,boolean blob){
-		this.value = value;
-		this.clob = clob;
-		this.blob = blob;
-	}
+    public ValueElement(Object value, boolean clob, boolean blob) {
+        this.value = value;
+        this.clob = clob;
+        this.blob = blob;
+    }
 
-	public Object getValue() {
-		return value;
-	}
-	public void setValue(Object value) {
-		this.value = value;
-	}
-	public boolean isClob() {
-		return clob;
-	}
-	public void setClob(boolean clob) {
-		this.clob = clob;
-	}
-	public boolean isBlob() {
-		return blob;
-	}
-	public void setBlob(boolean blob) {
-		this.blob = blob;
-	}
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public boolean isClob() {
+        return clob;
+    }
+
+    public void setClob(boolean clob) {
+        this.clob = clob;
+    }
+
+    public boolean isBlob() {
+        return blob;
+    }
+
+    public void setBlob(boolean blob) {
+        this.blob = blob;
+    }
 }

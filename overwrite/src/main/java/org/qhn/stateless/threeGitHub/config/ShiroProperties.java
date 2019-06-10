@@ -31,7 +31,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "jsets.shiro")
 public class ShiroProperties {
 
-
     // 默认SESSION超时时间：1小时=3600000毫秒(ms)
     protected static final Integer DEFAULT_SESSION_TIMEOUT = 3600000;
     // 默认SESSION清扫时间：1小时=3600000毫秒(ms)
@@ -98,7 +97,7 @@ public class ShiroProperties {
     private boolean jwtEnabled = Boolean.FALSE; // 是否启用JWT鉴权
     private boolean jwtBurnEnabled = Boolean.FALSE; // 是否启用JWT令牌即时失效
 
-    private String loginUrl;// 登陆地址
+    private String loginUrl = "/user/login";// 登陆地址
     private String loginSuccessUrl;// 登陆成功地址
     private String unauthorizedUrl;// 无访问权限地址
     private String kickoutUrl;// 被踢出地址

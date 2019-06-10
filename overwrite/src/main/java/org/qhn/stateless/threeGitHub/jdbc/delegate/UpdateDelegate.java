@@ -35,48 +35,56 @@ import com.google.common.collect.Lists;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class UpdateDelegate extends AbstractDelegate<Integer> {
 
-	private final Object persistent;
-	private final boolean ignoreNull;
-	private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
+    private final Object persistent;
+    private final boolean ignoreNull;
+    private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
 
-	private LinkedList<ValueElement> valueElements;
+    private LinkedList<ValueElement> valueElements;
 
-	public UpdateDelegate(JdbcTemplate jdbcTemplate,Object persistent,boolean ignoreNull) {
-		super(jdbcTemplate);
-		this.persistent = persistent;
-		this.ignoreNull = ignoreNull;
-	}
+    public UpdateDelegate(JdbcTemplate jdbcTemplate, Object persistent, boolean ignoreNull) {
+        super(jdbcTemplate);
+        this.persistent = persistent;
+        this.ignoreNull = ignoreNull;
+    }
 
-	@Override
-	public void prepare() {
-		this.checkEntity(this.persistent.getClass());
-		EntityElement entityElement = ElementResolver.resolve(this.persistent.getClass());
-		this.valueElements = Lists.newLinkedList();
-		this.sqlBuilder.UPDATE(entityElement.getTable());
-		FieldElement primaryKey = entityElement.getPrimaryKey();
-		Object primaryKeyValue = JdbcCommons.invokeMethod(this.persistent, primaryKey.getReadMethod()
-							, "实体："+entityElement.getName()+" 主键："+primaryKey.getName()+" 获取值失败");
-		Assert.notNull(primaryKeyValue,"实体:" + entityElement.getName() + ", 主键不能为空");
-		for (FieldElement fieldElement: entityElement.getFieldElements().values()) {
-			if(fieldElement.isTransientField()) continue;
-			if(fieldElement.isPrimaryKey()) continue;
-			Object value = JdbcCommons.invokeMethod(this.persistent, fieldElement.getReadMethod()
-							,"实体："+entityElement.getName()+" 字段："+fieldElement.getName()+" 获取值失败");
-			if(ignoreNull && null == value) continue;
-			this.sqlBuilder.SET(fieldElement.getColumn() + " = ?");
-			this.valueElements.add(new ValueElement(value,fieldElement.isClob(),fieldElement.isBlob()));
-		}
-		this.sqlBuilder.WHERE(primaryKey.getColumn() + " = ?");
-		this.valueElements.add(new ValueElement(primaryKeyValue,primaryKey.isClob(),primaryKey.isBlob()));
-	}
+    @Override
+    public void prepare() {
+        this.checkEntity(this.persistent.getClass());
+        EntityElement entityElement = ElementResolver.resolve(this.persistent.getClass());
+        this.valueElements = Lists.newLinkedList();
+        this.sqlBuilder.UPDATE(entityElement.getTable());
+        FieldElement primaryKey = entityElement.getPrimaryKey();
+        Object primaryKeyValue = JdbcCommons
+            .invokeMethod(this.persistent, primaryKey.getReadMethod()
+                , "实体：" + entityElement.getName() + " 主键：" + primaryKey.getName() + " 获取值失败");
+        Assert.notNull(primaryKeyValue, "实体:" + entityElement.getName() + ", 主键不能为空");
+        for (FieldElement fieldElement : entityElement.getFieldElements().values()) {
+            if (fieldElement.isTransientField()) {
+                continue;
+            }
+            if (fieldElement.isPrimaryKey()) {
+                continue;
+            }
+            Object value = JdbcCommons.invokeMethod(this.persistent, fieldElement.getReadMethod()
+                , "实体：" + entityElement.getName() + " 字段：" + fieldElement.getName() + " 获取值失败");
+            if (ignoreNull && null == value) {
+                continue;
+            }
+            this.sqlBuilder.SET(fieldElement.getColumn() + " = ?");
+            this.valueElements
+                .add(new ValueElement(value, fieldElement.isClob(), fieldElement.isBlob()));
+        }
+        this.sqlBuilder.WHERE(primaryKey.getColumn() + " = ?");
+        this.valueElements
+            .add(new ValueElement(primaryKeyValue, primaryKey.isClob(), primaryKey.isBlob()));
+    }
 
-	@Override
-	protected Integer doExecute() throws DataAccessException{
-		String sql = this.sqlBuilder.toString().toUpperCase();
-		return this.jdbcTemplate.update(sql,new ValueSetter(this.LOBHANDLER,this.valueElements));
-	}
+    @Override
+    protected Integer doExecute() throws DataAccessException {
+        String sql = this.sqlBuilder.toString().toUpperCase();
+        return this.jdbcTemplate.update(sql, new ValueSetter(this.LOBHANDLER, this.valueElements));
+    }
 }

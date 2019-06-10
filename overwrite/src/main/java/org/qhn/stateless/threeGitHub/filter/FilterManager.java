@@ -142,7 +142,7 @@ public class FilterManager {
         if (Commons.hasLen(properties.getForceLogoutUrl())) {
             this.anonFilterChain.put(properties.getForceLogoutUrl(), Commons.FILTER_ANON);
         }
-        this.anonFilterChain.put("/shiro-demo/user/login", Commons.FILTER_ANON);
+        this.anonFilterChain.put("/demo/user/login", Commons.FILTER_ANON);
         // ------------static
         if (this.properties.isJcaptchaEnable()) {
             this.staticFilterChain.put(Commons.JCAPTCHA_URL, Commons.FILTER_JCAPTCHA);

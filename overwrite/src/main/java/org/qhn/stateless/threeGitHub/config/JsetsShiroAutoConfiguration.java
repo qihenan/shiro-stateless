@@ -42,34 +42,35 @@ import org.springframework.context.annotation.Import;
 @AutoConfigureAfter(AbstractCachingConfiguration.class)
 public class JsetsShiroAutoConfiguration {
 
-	@Autowired
-	private BeanFactory beanFactory;
-	@Autowired
-	private ShiroProperties properties;
+    @Autowired
+    private BeanFactory beanFactory;
+    @Autowired
+    private ShiroProperties properties;
 
-	@Bean
-	public BeanPostProcessor lifecycleBeanPostProcessor() {
-		return new LifecycleBeanPostProcessor();
-	}
+    @Bean
+    public BeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
-	@Bean
-	public ShiroCryptoService shiroCryptoService() {
-		return new ShiroCryptoService();
-	}
+    @Bean
+    public ShiroCryptoService shiroCryptoService() {
+        return new ShiroCryptoService();
+    }
 
-	@Bean
-	public JsetsShiroManager jsetsShiroManager(ShiroCryptoService shiroCryptoService) {
-		JsetsShiroManager shiroManager = new JsetsShiroManager(
-										 this.beanFactory
-										,this.properties
-										,new SecurityManagerConfig()
-										,new FilterChainConfig());
-		shiroManager.setCryptoService(shiroCryptoService);
-		return shiroManager;
-	}
+    @Bean
+    public JsetsShiroManager jsetsShiroManager(ShiroCryptoService shiroCryptoService) {
+        JsetsShiroManager shiroManager = new JsetsShiroManager(
+            this.beanFactory
+            , this.properties
+            , new SecurityManagerConfig()
+            , new FilterChainConfig());
+        shiroManager.setCryptoService(shiroCryptoService);
+        return shiroManager;
+    }
 
-	@Bean
-	public ShiroSecurityService shiroSecurityService() {
-		return new ShiroSecurityService();
-	}
+    @Bean
+    public ShiroSecurityService shiroSecurityService() {
+        return new ShiroSecurityService();
+    }
+
 }

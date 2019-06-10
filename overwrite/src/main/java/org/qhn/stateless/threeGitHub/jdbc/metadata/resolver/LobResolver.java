@@ -26,36 +26,35 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.FieldElement;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public class LobResolver implements Resolver{
+public class LobResolver implements Resolver {
 
-	@Override
-	public void resolve(Element element, Annotation annotation) {
-		FieldElement fieldElement = (FieldElement)element;
-		fieldElement.setClob(isClob(fieldElement.getField().getType()));
-		fieldElement.setBlob(isBlob(fieldElement.getField().getType()));
-	}
+    @Override
+    public void resolve(Element element, Annotation annotation) {
+        FieldElement fieldElement = (FieldElement) element;
+        fieldElement.setClob(isClob(fieldElement.getField().getType()));
+        fieldElement.setBlob(isBlob(fieldElement.getField().getType()));
+    }
 
-	private boolean isClob(Class<?> type){
-		String simpleName = type.getSimpleName();
-		if("String".equals(simpleName)
-				||"Character[]".equals(simpleName)
-				||"char[]".equals(simpleName)
-				||"Clob".equals(simpleName)){
-			return true;
-		}
-		return false;
-	}
+    private boolean isClob(Class<?> type) {
+        String simpleName = type.getSimpleName();
+        if ("String".equals(simpleName)
+            || "Character[]".equals(simpleName)
+            || "char[]".equals(simpleName)
+            || "Clob".equals(simpleName)) {
+            return true;
+        }
+        return false;
+    }
 
-	private boolean isBlob(Class<?> type){
-		String simpleName = type.getSimpleName();
-		if("Byte[]".equals(simpleName)
-				||"byte[]".equals(simpleName)
-				||"Blob".equals(simpleName)){
-			return true;
-		}
-		return false;
-	}
+    private boolean isBlob(Class<?> type) {
+        String simpleName = type.getSimpleName();
+        if ("Byte[]".equals(simpleName)
+            || "byte[]".equals(simpleName)
+            || "Blob".equals(simpleName)) {
+            return true;
+        }
+        return false;
+    }
 
 }

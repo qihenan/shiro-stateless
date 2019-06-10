@@ -34,34 +34,43 @@ import org.slf4j.LoggerFactory;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
  */
-public class HmacAuthcFilter extends StatelessFilter{
+public class HmacAuthcFilter extends StatelessFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HmacAuthcFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HmacAuthcFilter.class);
 
-	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-		Subject subject = getSubject(request, response);
-		if (null != subject && subject.isAuthenticated()) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * 是否放行
+     */
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) {
+        Subject subject = getSubject(request, response);
+        if (null != subject && subject.isAuthenticated()) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		if(isHmacSubmission(request)){
-			AuthenticationToken token = createHmacToken(request, response);
-			try {
-				Subject subject = getSubject(request, response);
-				subject.login(token);
-				return true;
-			} catch (AuthenticationException e) {
-				LOGGER.error(request.getRemoteHost()+" HMAC认证  "+e.getMessage());
-				Commons.restFailed(WebUtils.toHttp(response)
-									, MessageConfig.REST_CODE_AUTH_UNAUTHORIZED,e.getMessage());
-			}
-		}
-		return false;
-	}
+    /**
+     * 拒绝处理
+     */
+    @Override
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+        //如果是Hmac鉴权的请求
+        if (isHmacSubmission(request)) {
+            //创建令牌
+            AuthenticationToken token = createHmacToken(request, response);
+            try {
+                Subject subject = getSubject(request, response);
+                subject.login(token);
+                return true;
+            } catch (AuthenticationException e) {
+                LOGGER.error(request.getRemoteHost() + " HMAC认证  " + e.getMessage());
+                Commons.restFailed(WebUtils.toHttp(response)
+                    , MessageConfig.REST_CODE_AUTH_UNAUTHORIZED, e.getMessage());
+            }
+        }
+        return false;
+    }
 
 }

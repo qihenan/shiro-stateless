@@ -40,7 +40,7 @@ public class HmacPermsFilter extends StatelessFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
-        Object mappedValue){
+        Object mappedValue) {
         Subject subject = getSubject(request, response);
         if ((null == subject || !subject.isAuthenticated()) && isHmacSubmission(request)) {
             AuthenticationToken token = createHmacToken(request, response);

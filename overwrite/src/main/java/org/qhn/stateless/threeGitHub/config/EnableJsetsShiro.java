@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Import;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

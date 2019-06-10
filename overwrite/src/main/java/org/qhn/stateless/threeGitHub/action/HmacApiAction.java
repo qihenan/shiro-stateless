@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 /**
  * HMAC数字摘要鉴权   测试API
  *
@@ -34,36 +35,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hmac_api")
 public class HmacApiAction {
 
-	@Autowired
-	private ShiroSecurityService shiroSecurityService;
+    @Autowired
+    private ShiroSecurityService shiroSecurityService;
 
-	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public BaseResponse add(@RequestParam(name="parameter1") String parameter1
-							,@RequestParam(name="parameter2") String parameter2) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public BaseResponse add(@RequestParam(name = "parameter1") String parameter1
+        , @RequestParam(name = "parameter2") String parameter2) {
 
-		return BaseResponse.ok()
-				.add("parameter1", parameter1)
-				.add("parameter2", parameter2)
-				.message("add成功");
-	}
+        return BaseResponse.ok()
+            .add("parameter1", parameter1)
+            .add("parameter2", parameter2)
+            .message("add成功");
+    }
 
-	@RequestMapping(value="/delete",method=RequestMethod.GET)
-	public BaseResponse delete(@RequestParam(name="parameter1") String parameter1
-							,@RequestParam(name="parameter2") String parameter2) {
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public BaseResponse delete(@RequestParam(name = "parameter1") String parameter1
+        , @RequestParam(name = "parameter2") String parameter2) {
 
-		return BaseResponse.ok()
-				.add("parameter1", parameter1)
-				.add("parameter2", parameter2)
-				.message("delete成功");
-	}
+        return BaseResponse.ok()
+            .add("parameter1", parameter1)
+            .add("parameter2", parameter2)
+            .message("delete成功");
+    }
 
-	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public BaseResponse update(@RequestParam(name="parameter1") String parameter1
-							,@RequestParam(name="parameter2") String parameter2) {
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public BaseResponse update(@RequestParam(name = "parameter1") String parameter1
+        , @RequestParam(name = "parameter2") String parameter2) {
 
-		return BaseResponse.ok()
-				.add("parameter1", parameter1)
-				.add("parameter2", parameter2)
-				.message("update成功");
-	}
+        return BaseResponse.ok()
+            .add("parameter1", parameter1)
+            .add("parameter2", parameter2)
+            .message("update成功");
+    }
 }

@@ -24,33 +24,39 @@ import com.google.common.base.Strings;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
-public class CustomRule extends AuthorizeRule{
+public class CustomRule extends AuthorizeRule {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String url;// 资源URL
-	private String rule;// 过滤规则
+    private String url;// 资源URL
+    private String rule;// 过滤规则
 
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getRule() {
-		return rule;
-	}
-	public void setRule(String rule) {
-		this.rule = rule;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	@Override
-	public StringBuilder toFilterChain() {
-		if(Strings.isNullOrEmpty(this.getUrl())) return null;
-		if(Strings.isNullOrEmpty(this.getRule())) return null;
-		return new StringBuilder(this.getRule());
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
+
+    @Override
+    public StringBuilder toFilterChain() {
+        if (Strings.isNullOrEmpty(this.getUrl())) {
+            return null;
+        }
+        if (Strings.isNullOrEmpty(this.getRule())) {
+            return null;
+        }
+        return new StringBuilder(this.getRule());
+    }
 
 }

@@ -33,47 +33,51 @@ import org.springframework.jdbc.support.lob.LobHandler;
  *
  */
 import org.springframework.util.Assert;
+
 /**
  * 抽象执行器
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
  */
-public abstract class AbstractDelegate<T> implements Delegate<T>{
+public abstract class AbstractDelegate<T> implements Delegate<T> {
 
-	protected static final LobHandler LOBHANDLER = new DefaultLobHandler();
-	protected final JdbcTemplate jdbcTemplate;
+    protected static final LobHandler LOBHANDLER = new DefaultLobHandler();
+    protected final JdbcTemplate jdbcTemplate;
 
-	public AbstractDelegate(JdbcTemplate jdbcTemplate){
-		this.jdbcTemplate = jdbcTemplate;
-	}
+    public AbstractDelegate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-	@Override
-	public T execute() throws DataAccessException {
-		prepare();
-		return doExecute();
-	}
+    @Override
+    public T execute() throws DataAccessException {
+        prepare();
+        return doExecute();
+    }
 
-	protected abstract void prepare();
-	protected abstract T doExecute() throws DataAccessException;
+    protected abstract void prepare();
 
-	protected Object generatedId(Object persistent, FieldElement fieldElement,Object value){
-		if((null == value||"".equals(value))
-				&& fieldElement.isGeneratedValue()
-				&& IdGenerators.UUID.equals(fieldElement.getGenerator())){
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			String errorMsg = "实体："+persistent.getClass().getName()+" 主键："+fieldElement.getName()+" 设置值失败";
-			JdbcCommons.invokeMethod(persistent, fieldElement.getWriteMethod(), errorMsg, uuid);
-			return uuid;
-		}
-		return value;
-	}
+    protected abstract T doExecute() throws DataAccessException;
 
-	protected boolean isEntity(Class<?> persistentClass){
-		return null != persistentClass.getAnnotation(javax.persistence.Entity.class);
-	}
+    protected Object generatedId(Object persistent, FieldElement fieldElement, Object value) {
+        if ((null == value || "".equals(value))
+            && fieldElement.isGeneratedValue()
+            && IdGenerators.UUID.equals(fieldElement.getGenerator())) {
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String errorMsg =
+                "实体：" + persistent.getClass().getName() + " 主键：" + fieldElement.getName()
+                    + " 设置值失败";
+            JdbcCommons.invokeMethod(persistent, fieldElement.getWriteMethod(), errorMsg, uuid);
+            return uuid;
+        }
+        return value;
+    }
 
-	protected void checkEntity(Class<?> persistentClass){
-		Assert.isTrue(isEntity(persistentClass),persistentClass+" 如果是实体类型请使用@Entity注解进行标识");
-	}
+    protected boolean isEntity(Class<?> persistentClass) {
+        return null != persistentClass.getAnnotation(javax.persistence.Entity.class);
+    }
+
+    protected void checkEntity(Class<?> persistentClass) {
+        Assert.isTrue(isEntity(persistentClass), persistentClass + " 如果是实体类型请使用@Entity注解进行标识");
+    }
 }

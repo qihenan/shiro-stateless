@@ -36,26 +36,27 @@ import org.slf4j.LoggerFactory;
  */
 public class JwtRolesFilter extends StatelessFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JwtRolesFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtRolesFilter.class);
 
 
-	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-		Subject subject = getSubject(request, response);
-		if ((null == subject || !subject.isAuthenticated()) && isJwtSubmission(request)) {
-			AuthenticationToken token = createJwtToken(request, response);
-			try {
-				subject = getSubject(request, response);
-				subject.login(token);
-				return this.checkRoles(subject,mappedValue);
-			} catch (AuthenticationException e) {
-				LOGGER.error(request.getRemoteHost()+" JWT鉴权  "+e.getMessage());
-				Commons.restFailed(WebUtils.toHttp(response)
-										, MessageConfig.REST_CODE_AUTH_UNAUTHORIZED,e.getMessage());
-			}
-		}
-		return false;
-	}
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) throws Exception {
+        Subject subject = getSubject(request, response);
+        if ((null == subject || !subject.isAuthenticated()) && isJwtSubmission(request)) {
+            AuthenticationToken token = createJwtToken(request, response);
+            try {
+                subject = getSubject(request, response);
+                subject.login(token);
+                return this.checkRoles(subject, mappedValue);
+            } catch (AuthenticationException e) {
+                LOGGER.error(request.getRemoteHost() + " JWT鉴权  " + e.getMessage());
+                Commons.restFailed(WebUtils.toHttp(response)
+                    , MessageConfig.REST_CODE_AUTH_UNAUTHORIZED, e.getMessage());
+            }
+        }
+        return false;
+    }
 
 
 }

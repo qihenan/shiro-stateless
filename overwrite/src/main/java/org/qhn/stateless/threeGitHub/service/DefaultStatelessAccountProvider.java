@@ -26,35 +26,36 @@ import org.qhn.stateless.threeGitHub.model.Account;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
-public class DefaultStatelessAccountProvider implements ShiroStatelessAccountProvider{
+public class DefaultStatelessAccountProvider implements ShiroStatelessAccountProvider {
 
-	private ShiroAccountProvider shiroAccountProvider;
+    private ShiroAccountProvider shiroAccountProvider;
 
-	@Override
-	public boolean checkAccount(String appId) throws AuthenticationException {
-		Account account = shiroAccountProvider.loadAccount(appId);
-		if(null == account) return false;
-		return true;
-	}
+    @Override
+    public boolean checkAccount(String appId) throws AuthenticationException {
+        Account account = shiroAccountProvider.loadAccount(appId);
+        if (null == account) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public String loadAppKey(String appId) throws AuthenticationException {
-		return null;
-	}
+    @Override
+    public String loadAppKey(String appId) throws AuthenticationException {
+        return null;
+    }
 
-	@Override
-	public Set<String> loadRoles(String appId) {
-		return this.shiroAccountProvider.loadRoles(appId);
-	}
+    @Override
+    public Set<String> loadRoles(String appId) {
+        return this.shiroAccountProvider.loadRoles(appId);
+    }
 
-	@Override
-	public Set<String> loadPermissions(String appId) {
-		return this.shiroAccountProvider.loadPermissions(appId);
-	}
+    @Override
+    public Set<String> loadPermissions(String appId) {
+        return this.shiroAccountProvider.loadPermissions(appId);
+    }
 
-	public void setShiroAccountProvider(ShiroAccountProvider shiroAccountProvider) {
-		this.shiroAccountProvider = shiroAccountProvider;
-	}
+    public void setShiroAccountProvider(ShiroAccountProvider shiroAccountProvider) {
+        this.shiroAccountProvider = shiroAccountProvider;
+    }
 }

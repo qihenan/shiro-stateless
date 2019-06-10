@@ -29,20 +29,19 @@ import org.springframework.util.Assert;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public class GeneratedValueResolver implements Resolver{
+public class GeneratedValueResolver implements Resolver {
 
-	@Override
-	public void resolve(Element element, Annotation annotation) {
-		FieldElement fieldElement = (FieldElement)element;
-		EntityElement entityElement = fieldElement.getEntityElement();
-		javax.persistence.GeneratedValue generatedValue = (javax.persistence.GeneratedValue) annotation;
-		Assert.isTrue(fieldElement.isPrimaryKey(),
-				"实体："+entityElement.getName()+",注解错误。 GeneratedValue只能注解在主键上");
-		fieldElement.setGeneratedValue(Boolean.TRUE);
-		fieldElement.setStrategy(generatedValue.strategy());
-		fieldElement.setGenerator(generatedValue.generator());
-	}
+    @Override
+    public void resolve(Element element, Annotation annotation) {
+        FieldElement fieldElement = (FieldElement) element;
+        EntityElement entityElement = fieldElement.getEntityElement();
+        javax.persistence.GeneratedValue generatedValue = (javax.persistence.GeneratedValue) annotation;
+        Assert.isTrue(fieldElement.isPrimaryKey(),
+            "实体：" + entityElement.getName() + ",注解错误。 GeneratedValue只能注解在主键上");
+        fieldElement.setGeneratedValue(Boolean.TRUE);
+        fieldElement.setStrategy(generatedValue.strategy());
+        fieldElement.setGenerator(generatedValue.generator());
+    }
 
 }

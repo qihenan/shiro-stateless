@@ -34,27 +34,28 @@ import org.slf4j.LoggerFactory;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
  */
-public class HmacRolesFilter extends StatelessFilter{
+public class HmacRolesFilter extends StatelessFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HmacAuthcFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HmacAuthcFilter.class);
 
 
-	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-		Subject subject = getSubject(request, response);
-		if ((null == subject || !subject.isAuthenticated()) && isHmacSubmission(request)) {
-			AuthenticationToken token = createHmacToken(request, response);
-			try {
-				subject = getSubject(request, response);
-				subject.login(token);
-				return this.checkRoles(subject,mappedValue);
-			} catch (AuthenticationException e) {
-				LOGGER.error(request.getRemoteHost()+" HMAC鉴权  "+e.getMessage());
-				Commons.restFailed(WebUtils.toHttp(response)
-										, MessageConfig.REST_CODE_AUTH_UNAUTHORIZED,e.getMessage());
-			}
-		}
-		return false;
-	}
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+        Object mappedValue) throws Exception {
+        Subject subject = getSubject(request, response);
+        if ((null == subject || !subject.isAuthenticated()) && isHmacSubmission(request)) {
+            AuthenticationToken token = createHmacToken(request, response);
+            try {
+                subject = getSubject(request, response);
+                subject.login(token);
+                return this.checkRoles(subject, mappedValue);
+            } catch (AuthenticationException e) {
+                LOGGER.error(request.getRemoteHost() + " HMAC鉴权  " + e.getMessage());
+                Commons.restFailed(WebUtils.toHttp(response)
+                    , MessageConfig.REST_CODE_AUTH_UNAUTHORIZED, e.getMessage());
+            }
+        }
+        return false;
+    }
 
 }

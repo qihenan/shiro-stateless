@@ -32,25 +32,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/article")
 public class ArticleAction {
 
-	  @RequestMapping("/list")
-	    public String index() {
-	        return "article/article_list";
-	    }
+    @RequestMapping("/list")
+    public String index() {
+        return "article/article_list";
+    }
 
-	    @RequestMapping("/add")
-	    public @ResponseBody
-		BaseResponse add() {
-	    	return BaseResponse.ok().message("文章添加成功，当然是模拟的");
-	    }
+    @RequestMapping("/add")
+    public @ResponseBody
+    BaseResponse add() {
+        return BaseResponse.ok().message("文章添加成功，当然是模拟的");
+    }
 
-	    @RequestMapping("/delete")
-	    public @ResponseBody BaseResponse delete() {
-	    	return BaseResponse.ok().message("文章删除成功，当然是模拟的");
-	    }
+    @RequestMapping("/delete")
+    public @ResponseBody
+    BaseResponse delete() {
+        return BaseResponse.ok().message("文章删除成功，当然是模拟的");
+    }
 
-	    @RequestMapping("/update")
-	    public @ResponseBody BaseResponse update() {
-	    	return BaseResponse.ok().message("文章修改成功，当然是模拟的");
-	    }
+    @RequestMapping("/update")
+    public @ResponseBody
+    BaseResponse update() {
+        return BaseResponse.ok().message("文章修改成功，当然是模拟的");
+    }
 
 }

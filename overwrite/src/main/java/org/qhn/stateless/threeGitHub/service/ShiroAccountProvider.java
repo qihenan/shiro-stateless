@@ -29,23 +29,26 @@ import org.qhn.stateless.threeGitHub.model.Account;
  * @date 2016年6月24日 下午2:55:15
  */
 public interface ShiroAccountProvider {
-	/**
-	 * 根据用户名获取账号信息
-	 * @return 账号信如果查找不到用户返回null或者直接抛出AuthenticationException
-	 * @param
-	 * @see
-	 */
-	public Account loadAccount(String account) throws AuthenticationException;
-	/**
-	 * 根据用户名称加载用户所有的角色
-	 * @param
-	 * @return 角色列表
-	 */
-	public Set<String> loadRoles(String account);
-	/**
-	 * 根据用户名称加载用户所有的权限
-	 * @param
-	 * @return 权限列表
-	 */
-	public Set<String> loadPermissions(String account);
+
+    /**
+     * 根据用户名获取账号信息
+     *
+     * @return 账号信如果查找不到用户返回null或者直接抛出AuthenticationException
+     * @see
+     */
+    public Account loadAccount(String account) throws AuthenticationException;
+
+    /**
+     * 根据用户名称加载用户所有的角色
+     *
+     * @return 角色列表
+     */
+    public Set<String> loadRoles(String account);
+
+    /**
+     * 根据用户名称加载用户所有的权限
+     *
+     * @return 权限列表
+     */
+    public Set<String> loadPermissions(String account);
 }

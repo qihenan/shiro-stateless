@@ -27,76 +27,75 @@ import org.qhn.stateless.threeGitHub.util.CryptoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
  * 签名\摘要服务
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
 public class ShiroCryptoService {
 
-	@Autowired
-	private ShiroProperties shiroProperties;
+    @Autowired
+    private ShiroProperties shiroProperties;
 
-	/**
-	 * 生成密码
-	 * @param plaintext 明文
-	 */
-	public String password(String plaintext) {
-		return new SimpleHash(this.shiroProperties.getPasswdAlg()
-							 ,plaintext
-							 ,this.shiroProperties.getPasswdSalt()
-							 ,this.shiroProperties.getPasswdIterations()
-						).toHex();
-	}
+    /**
+     * 生成密码
+     *
+     * @param plaintext 明文
+     */
+    public String password(String plaintext) {
+        return new SimpleHash(this.shiroProperties.getPasswdAlg()
+            , plaintext
+            , this.shiroProperties.getPasswdSalt()
+            , this.shiroProperties.getPasswdIterations()
+        ).toHex();
+    }
 
-	/**
-	 * 生成HMAC摘要
-	 *
-	 * @param plaintext 明文
-	 */
-	public String hmacDigest(String plaintext) {
-		return hmacDigest(plaintext,this.shiroProperties.getHmacSecretKey());
-	}
+    /**
+     * 生成HMAC摘要
+     *
+     * @param plaintext 明文
+     */
+    public String hmacDigest(String plaintext) {
+        return hmacDigest(plaintext, this.shiroProperties.getHmacSecretKey());
+    }
 
-	/**
-	 * 生成HMAC摘要
-	 *
-	 * @param plaintext 明文
-	 */
-	public String hmacDigest(String plaintext,String appKey) {
-		return CryptoUtil.hmacDigest(plaintext,appKey,this.shiroProperties.getHmacAlg());
-	}
+    /**
+     * 生成HMAC摘要
+     *
+     * @param plaintext 明文
+     */
+    public String hmacDigest(String plaintext, String appKey) {
+        return CryptoUtil.hmacDigest(plaintext, appKey, this.shiroProperties.getHmacAlg());
+    }
 
-	/**
-	 * 验签JWT
-	 *
-	 * @param jwt json web token
-	 */
-	public StatelessLogined parseJwt(String jwt) {
-		return parseJwt(jwt,this.shiroProperties.getJwtSecretKey());
-	}
+    /**
+     * 验签JWT
+     *
+     * @param jwt json web token
+     */
+    public StatelessLogined parseJwt(String jwt) {
+        return parseJwt(jwt, this.shiroProperties.getJwtSecretKey());
+    }
 
-	/**
-	 * 验签JWT
-	 *
-	 * @param jwt json web token
-	 */
-	public StatelessLogined parseJwt(String jwt,String appKey) {
-		Claims claims = Jwts.parser()
-				.setSigningKey(DatatypeConverter.parseBase64Binary(appKey))
-				.parseClaimsJws(jwt)
-				.getBody();
-		StatelessLogined statelessAccount = new StatelessLogined();
-		statelessAccount.setTokenId(claims.getId());// 令牌ID
-		statelessAccount.setAppId(claims.getSubject());// 客户标识
-		statelessAccount.setIssuer(claims.getIssuer());// 签发者
-		statelessAccount.setIssuedAt(claims.getIssuedAt());// 签发时间
-		statelessAccount.setAudience(claims.getAudience());// 接收方
-		statelessAccount.setRoles(claims.get("roles", String.class));// 访问主张-角色
-		statelessAccount.setPerms(claims.get("perms", String.class));// 访问主张-权限
-		return statelessAccount;
-	}
+    /**
+     * 验签JWT
+     *
+     * @param jwt json web token
+     */
+    public StatelessLogined parseJwt(String jwt, String appKey) {
+        Claims claims = Jwts.parser()
+            .setSigningKey(DatatypeConverter.parseBase64Binary(appKey))
+            .parseClaimsJws(jwt)
+            .getBody();
+        StatelessLogined statelessAccount = new StatelessLogined();
+        statelessAccount.setTokenId(claims.getId());// 令牌ID
+        statelessAccount.setAppId(claims.getSubject());// 客户标识
+        statelessAccount.setIssuer(claims.getIssuer());// 签发者
+        statelessAccount.setIssuedAt(claims.getIssuedAt());// 签发时间
+        statelessAccount.setAudience(claims.getAudience());// 接收方
+        statelessAccount.setRoles(claims.get("roles", String.class));// 访问主张-角色
+        statelessAccount.setPerms(claims.get("perms", String.class));// 访问主张-权限
+        return statelessAccount;
+    }
 
 }

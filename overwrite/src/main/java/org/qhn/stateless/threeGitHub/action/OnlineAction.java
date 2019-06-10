@@ -38,37 +38,40 @@ import com.google.common.collect.Lists;
 @Controller
 @RequestMapping("/online")
 public class OnlineAction {
-	/**
+
+    /**
      * 当前在线用户
      */
     @RequestMapping("/list")
     public String list(Model model) {
-    	// 当前存活的Session数量
-    	int onlineCount = ShiroUtils.getActiveSessionCount();
-    	// 当前存活的Session列表
-    	List<Session> activeSessions = ShiroUtils.getActiveSessions();
-    	// 包装OnlineUserVo
-    	List<OnlineUserVo> onlineUsers = Lists.newArrayList();
-    	for(Session session:activeSessions){
-    		OnlineUserVo onlineUser = new OnlineUserVo();
-    		onlineUser.setSessionId((String)session.getId());
-    		onlineUser.setStartTime(session.getStartTimestamp());
-    		onlineUser.setLastAccess(session.getLastAccessTime());
-    		onlineUser.setHost(session.getHost());
-    		onlineUser.setTimeout(session.getTimeout());
-    		// 从SESSION中获取里面的用户属性
-    		UserEntity user = (UserEntity) session.getAttribute(ShiroProperties.ATTRIBUTE_SESSION_CURRENT_USER);
-    		if(null!=user){
-    			onlineUser.setUserName(user.getUserName());
-    		}else{
-    			onlineUser.setUserName("无效的，等待被清理");
-    		}
-    		if(null!=session.getAttribute(ShiroProperties.ATTRIBUTE_SESSION_FORCE_LOGOUT))
-    			onlineUser.setForceLogout(true);
-    		onlineUsers.add(onlineUser);
-    	}
-    	model.addAttribute("onlineCount",onlineCount);
-    	model.addAttribute("onlineUsers",onlineUsers);
+        // 当前存活的Session数量
+        int onlineCount = ShiroUtils.getActiveSessionCount();
+        // 当前存活的Session列表
+        List<Session> activeSessions = ShiroUtils.getActiveSessions();
+        // 包装OnlineUserVo
+        List<OnlineUserVo> onlineUsers = Lists.newArrayList();
+        for (Session session : activeSessions) {
+            OnlineUserVo onlineUser = new OnlineUserVo();
+            onlineUser.setSessionId((String) session.getId());
+            onlineUser.setStartTime(session.getStartTimestamp());
+            onlineUser.setLastAccess(session.getLastAccessTime());
+            onlineUser.setHost(session.getHost());
+            onlineUser.setTimeout(session.getTimeout());
+            // 从SESSION中获取里面的用户属性
+            UserEntity user = (UserEntity) session
+                .getAttribute(ShiroProperties.ATTRIBUTE_SESSION_CURRENT_USER);
+            if (null != user) {
+                onlineUser.setUserName(user.getUserName());
+            } else {
+                onlineUser.setUserName("无效的，等待被清理");
+            }
+            if (null != session.getAttribute(ShiroProperties.ATTRIBUTE_SESSION_FORCE_LOGOUT)) {
+                onlineUser.setForceLogout(true);
+            }
+            onlineUsers.add(onlineUser);
+        }
+        model.addAttribute("onlineCount", onlineCount);
+        model.addAttribute("onlineUsers", onlineUsers);
         return "online/online_list";
     }
 
@@ -76,8 +79,8 @@ public class OnlineAction {
      * 强制SESSION下线
      */
     @RequestMapping("/do_force_fogout")
-    public String doForceLogout(@RequestParam(name="sessionId") String sessionId) {
-    	ShiroUtils.forceLogout(sessionId);
+    public String doForceLogout(@RequestParam(name = "sessionId") String sessionId) {
+        ShiroUtils.forceLogout(sessionId);
         return "redirect:/online/list";
     }
 }

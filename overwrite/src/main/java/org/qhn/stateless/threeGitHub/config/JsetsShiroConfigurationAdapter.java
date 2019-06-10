@@ -28,43 +28,43 @@ import org.springframework.context.annotation.Bean;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
 @AutoConfigureAfter(JsetsShiroAutoConfiguration.class)
 public abstract class JsetsShiroConfigurationAdapter {
 
-	@Autowired
-	private JsetsShiroManager shiroManager;
+    @Autowired
+    private JsetsShiroManager shiroManager;
 
-	@PostConstruct
-	private void init(){
-		this.configure(this.shiroManager.getManagerConfig());
-		this.configure(this.shiroManager.getFilterConfig());
-		this.shiroManager.build();
-	}
+    @PostConstruct
+    private void init() {
+        this.configure(this.shiroManager.getManagerConfig());
+        this.configure(this.shiroManager.getFilterConfig());
+        this.shiroManager.build();
+    }
 
-	/**
-	 *   设置、定制安全组件
-	 *  <br>主要方法：
-	 * 	<br>securityManager.setAccountProvider(accountProvider) 设置账号信息提供者
-	 *	<br>securityManager.setPasswdRetryLimitHandler(passwdRetryLimitHandler) 设置密码连续错误超限处理器
-	 *  <br>其他方法@see org.jsets.shiro.config.SecurityManagerConfig
-	 *  <br>
-	 */
-	protected abstract void configure(SecurityManagerConfig securityManager);
-	/**
-	 *   设置、定制过滤器链
-	 *  <br>主要方法：
-	 * 	<br>filterChainConfig.setShiroFilteRulesProvider(shiroFilteRulesProvider) 设置动态过滤规则提供者
-	 *  <br>其他方法@see org.jsets.shiro.config.FilterChainConfig
-	 *  <br>
-	 */
-	protected abstract void configure(FilterChainConfig filterChain);
+    /**
+     * 设置、定制安全组件
+     * <br>主要方法：
+     * <br>securityManager.setAccountProvider(accountProvider) 设置账号信息提供者
+     * <br>securityManager.setPasswdRetryLimitHandler(passwdRetryLimitHandler) 设置密码连续错误超限处理器
+     * <br>其他方法@see org.jsets.shiro.config.SecurityManagerConfig
+     * <br>
+     */
+    protected abstract void configure(SecurityManagerConfig securityManager);
+
+    /**
+     * 设置、定制过滤器链
+     * <br>主要方法：
+     * <br>filterChainConfig.setShiroFilteRulesProvider(shiroFilteRulesProvider) 设置动态过滤规则提供者
+     * <br>其他方法@see org.jsets.shiro.config.FilterChainConfig
+     * <br>
+     */
+    protected abstract void configure(FilterChainConfig filterChain);
 
 
-	@Bean
-	public ShiroFilterFactoryBean shiroFilterFactoryBean() {
-		return this.shiroManager.getShiroFilterFactoryBean();
-	}
+    @Bean
+    public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+        return this.shiroManager.getShiroFilterFactoryBean();
+    }
 
 }

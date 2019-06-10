@@ -26,14 +26,14 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.FieldElement;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public class TransientResolver implements Resolver{
-	@Override
-	public void resolve(Element element, Annotation annotation) {
+public class TransientResolver implements Resolver {
 
-		FieldElement fieldElement = (FieldElement)element;
-		fieldElement.setTransientField(Boolean.TRUE);
-	}
+    @Override
+    public void resolve(Element element, Annotation annotation) {
+
+        FieldElement fieldElement = (FieldElement) element;
+        fieldElement.setTransientField(Boolean.TRUE);
+    }
 
 }

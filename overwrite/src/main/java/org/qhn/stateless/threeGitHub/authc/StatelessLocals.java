@@ -31,14 +31,14 @@ public abstract class StatelessLocals {
     private static final ThreadLocal<Account> ACCOUNTS = new ThreadLocal<Account>();
 
     public static Account getAccount() {
-    	return ACCOUNTS.get();
+        return ACCOUNTS.get();
     }
 
     protected static void setAccount(Account account) {
-    	ACCOUNTS.set(account);
+        ACCOUNTS.set(account);
     }
 
     protected static void removeAccount() {
-    	ACCOUNTS.remove();
+        ACCOUNTS.remove();
     }
 }

@@ -24,10 +24,9 @@ import org.springframework.dao.DataAccessException;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public interface Delegate<T> {
 
-	T execute() throws DataAccessException;
+    T execute() throws DataAccessException;
 
 }

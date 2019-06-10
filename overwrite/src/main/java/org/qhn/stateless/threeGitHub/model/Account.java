@@ -25,13 +25,15 @@ import java.io.Serializable;
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
  */
-public interface Account extends Serializable{
-	/**
-	 * 获取用户名
-	 */
-	public String getAccount();
-	/**
-	 * 获取登陆口令
-	 */
-	public String getPassword();
+public interface Account extends Serializable {
+
+    /**
+     * 获取用户名
+     */
+    public String getAccount();
+
+    /**
+     * 获取登陆口令
+     */
+    public String getPassword();
 }

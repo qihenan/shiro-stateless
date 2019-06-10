@@ -41,7 +41,7 @@ public class JwtAuthcFilter extends StatelessFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
-        Object mappedValue) throws Exception {
+        Object mappedValue) {
         if (null != getSubject(request, response)
             && getSubject(request, response).isAuthenticated()) {
             return true;
@@ -50,8 +50,7 @@ public class JwtAuthcFilter extends StatelessFilter {
     }
 
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
-        throws Exception {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
         if (isJwtSubmission(request)) {
             AuthenticationToken token = createJwtToken(request, response);
             try {

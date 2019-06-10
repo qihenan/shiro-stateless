@@ -25,45 +25,52 @@ import org.qhn.stateless.threeGitHub.jdbc.metadata.DynamicFieldElement;
 import org.qhn.stateless.threeGitHub.jdbc.util.JdbcCommons;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.lob.LobHandler;
+
 /**
- *
- *  动态 RowMapper
+ * 动态 RowMapper
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
-public class DynamicEntityRowMapper<T> implements RowMapper<T>{
+public class DynamicEntityRowMapper<T> implements RowMapper<T> {
 
-	private final LobHandler lobHandler;
-	private final DynamicEntityElement dynamicEntityElement;
-	private final Class<?> dynamicEntityClass;
-	private final boolean isMap;
+    private final LobHandler lobHandler;
+    private final DynamicEntityElement dynamicEntityElement;
+    private final Class<?> dynamicEntityClass;
+    private final boolean isMap;
 
-	public DynamicEntityRowMapper(LobHandler lobHandler
-			,DynamicEntityElement dynamicEntityElement,Class<?> dynamicEntityClass) {
-		this.lobHandler = lobHandler;
-		this.dynamicEntityElement = dynamicEntityElement;
-		this.dynamicEntityClass = dynamicEntityClass;
-		this.isMap = true;
-	}
+    public DynamicEntityRowMapper(LobHandler lobHandler
+        , DynamicEntityElement dynamicEntityElement, Class<?> dynamicEntityClass) {
+        this.lobHandler = lobHandler;
+        this.dynamicEntityElement = dynamicEntityElement;
+        this.dynamicEntityClass = dynamicEntityClass;
+        this.isMap = true;
+    }
 
-	public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-		T instance = JdbcCommons.newInstance(this.dynamicEntityClass);
-		ResultSetMetaData rsm =rs.getMetaData();
-		int col = rsm.getColumnCount();   //获得列的个数
-		for (int i = 1; i <= col; i++) {
-			String columnLabel = rsm.getColumnLabel(i).toUpperCase();
-			int columnType = rsm.getColumnType(i);
-			DynamicFieldElement dynamicFieldElement = this.dynamicEntityElement
-								.getDynamicFieldElements().get(columnLabel.toUpperCase());
-			if(null == dynamicFieldElement) continue;
-			Object value = JdbcCommons.getResultValue(rs, i, columnType, dynamicFieldElement.getType());
-			if(value==null) continue;
-			String errorMsg = "实体："+this.dynamicEntityElement.getName()+" 字段："+dynamicFieldElement.getName()+" 设置值失败";
-			JdbcCommons.invokeMethod(instance, dynamicFieldElement.getWriteMethod(), errorMsg, value);
-		}
-		return instance;
-	}
+    public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+        T instance = JdbcCommons.newInstance(this.dynamicEntityClass);
+        ResultSetMetaData rsm = rs.getMetaData();
+        int col = rsm.getColumnCount();   //获得列的个数
+        for (int i = 1; i <= col; i++) {
+            String columnLabel = rsm.getColumnLabel(i).toUpperCase();
+            int columnType = rsm.getColumnType(i);
+            DynamicFieldElement dynamicFieldElement = this.dynamicEntityElement
+                .getDynamicFieldElements().get(columnLabel.toUpperCase());
+            if (null == dynamicFieldElement) {
+                continue;
+            }
+            Object value = JdbcCommons
+                .getResultValue(rs, i, columnType, dynamicFieldElement.getType());
+            if (value == null) {
+                continue;
+            }
+            String errorMsg =
+                "实体：" + this.dynamicEntityElement.getName() + " 字段：" + dynamicFieldElement.getName()
+                    + " 设置值失败";
+            JdbcCommons
+                .invokeMethod(instance, dynamicFieldElement.getWriteMethod(), errorMsg, value);
+        }
+        return instance;
+    }
 
 }

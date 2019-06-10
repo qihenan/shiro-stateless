@@ -48,176 +48,178 @@ import org.slf4j.LoggerFactory;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月31日
- *
  */
 public abstract class Commons {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Commons.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Commons.class);
 
-	public static final String JCAPTCHA_URL = "/jcaptcha.jpg";
-	public static final String FILTER_ANON = "anon";
-	public static final String FILTER_AUTHC = "authc";
-	public static final String FILTER_JCAPTCHA = "jcaptcha";
-	public static final String FILTER_ROLES = "roles";
-	public static final String FILTER_PERMS = "perms";
-	public static final String FILTER_USER = "user";
-	public static final String FILTER_KEEP_ONE = "keepOne";
-	public static final String FILTER_FORCE_LOGOUT = "forceLogout";
-	public static final String FILTER_HMAC = "hmac";
-	public static final String FILTER_HMAC_ROLES = "hmacRoles";
-	public static final String FILTER_HMAC_PERMS = "hmacPerms";
-	public static final String FILTER_JWT = "jwt";
-	public static final String FILTER_JWT_ROLES = "jwtRoles";
-	public static final String FILTER_JWT_PERMS = "jwtPerms";
+    public static final String JCAPTCHA_URL = "/jcaptcha.jpg";
+    public static final String FILTER_ANON = "anon";
+    public static final String FILTER_AUTHC = "authc";
+    public static final String FILTER_JCAPTCHA = "jcaptcha";
+    public static final String FILTER_ROLES = "roles";
+    public static final String FILTER_PERMS = "perms";
+    public static final String FILTER_USER = "user";
+    public static final String FILTER_KEEP_ONE = "keepOne";
+    public static final String FILTER_FORCE_LOGOUT = "forceLogout";
+    public static final String FILTER_HMAC = "hmac";
+    public static final String FILTER_HMAC_ROLES = "hmacRoles";
+    public static final String FILTER_HMAC_PERMS = "hmacPerms";
+    public static final String FILTER_JWT = "jwt";
+    public static final String FILTER_JWT_ROLES = "jwtRoles";
+    public static final String FILTER_JWT_PERMS = "jwtPerms";
 
-	public static final short CACHE_TYPE_MAP = 0;
-	public static final short CACHE_TYPE_EHCACHE = 1;
-	public static final short CACHE_TYPE_REDIS = 2;
-	public static final short CACHE_TYPE_CUSTOM = 3;
-	public static final short CACHE_TYPE_SPRING = 4;
+    public static final short CACHE_TYPE_MAP = 0;
+    public static final short CACHE_TYPE_EHCACHE = 1;
+    public static final short CACHE_TYPE_REDIS = 2;
+    public static final short CACHE_TYPE_CUSTOM = 3;
+    public static final short CACHE_TYPE_SPRING = 4;
 
-	public static final String REMEMBERME_COOKIE_NAME = "rememberMeCookie";
+    public static final String REMEMBERME_COOKIE_NAME = "rememberMeCookie";
 
 
-	private static final ObjectMapper MAPPER = new ObjectMapper();
-	private static CompressionCodecResolver CODECRESOLVER = new DefaultCompressionCodecResolver();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static CompressionCodecResolver CODECRESOLVER = new DefaultCompressionCodecResolver();
 
-	/**
-	 * 判断是否AJAX请求
-	 */
-	public static boolean isAjax(HttpServletRequest request) {
-		return "XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"));
-	}
+    /**
+     * 判断是否AJAX请求
+     */
+    public static boolean isAjax(HttpServletRequest request) {
+        return "XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"));
+    }
 
-	/**
-	 * REST失败响应
-	 */
-	public static void restFailed(HttpServletResponse response,String code,String message) {
-		respondJson(response, HttpServletResponse.SC_BAD_REQUEST,code,message);
-	}
+    /**
+     * REST失败响应
+     */
+    public static void restFailed(HttpServletResponse response, String code, String message) {
+        respondJson(response, HttpServletResponse.SC_BAD_REQUEST, code, message);
+    }
 
-	/**
-	 * AJAX成功响应
-	 */
-	public static void ajaxSucceed(HttpServletResponse response,String code,String message) {
-		respondJson(response, HttpServletResponse.SC_OK,code,message);
-	}
+    /**
+     * AJAX成功响应
+     */
+    public static void ajaxSucceed(HttpServletResponse response, String code, String message) {
+        respondJson(response, HttpServletResponse.SC_OK, code, message);
+    }
 
-	/**
-	 * AJAX失败响应
-	 */
-	public static void ajaxFailed(HttpServletResponse response
-													,int respondStatus,String code,String message) {
-		respondJson(response,respondStatus,code,message);
-	}
+    /**
+     * AJAX失败响应
+     */
+    public static void ajaxFailed(HttpServletResponse response
+        , int respondStatus, String code, String message) {
+        respondJson(response, respondStatus, code, message);
+    }
 
-	/**
-	 * JSON响应
-	 */
-	private static void respondJson(HttpServletResponse response
-											, int respondStatus, String code,String message) {
-		Map<String,String> map = Maps.newHashMap();
-		map.put("code", code);
-		map.put("message", message);
-		response.setStatus(respondStatus);
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("application/json; charset=utf-8");
-		PrintWriter out = null;
-		try {
-			out = response.getWriter();
-			String json = new ObjectMapper().writeValueAsString(map);
-			out.write(json);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		} finally {
-			if (out != null)
-				out.close();
-		}
-	}
+    /**
+     * JSON响应
+     */
+    private static void respondJson(HttpServletResponse response
+        , int respondStatus, String code, String message) {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("code", code);
+        map.put("message", message);
+        response.setStatus(respondStatus);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            String json = new ObjectMapper().writeValueAsString(map);
+            out.write(json);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
 
-	/**
-	 * 设置信息
-	 */
-	public static void setAuthMessage(ServletRequest request, String message) {
-		request.setAttribute(ShiroProperties.ATTRIBUTE_REQUEST_AUTH_MESSAGE,message);
-	}
+    /**
+     * 设置信息
+     */
+    public static void setAuthMessage(ServletRequest request, String message) {
+        request.setAttribute(ShiroProperties.ATTRIBUTE_REQUEST_AUTH_MESSAGE, message);
+    }
 
-	/**
-	 * 分割字符串进SET
-	 */
-	public static Set<String> split(String str) {
-		return split(str, ",");
-	}
+    /**
+     * 分割字符串进SET
+     */
+    public static Set<String> split(String str) {
+        return split(str, ",");
+    }
 
-	/**
-	 * 分割字符串进SET
-	 */
-	public static Set<String> split(String str, String separator) {
+    /**
+     * 分割字符串进SET
+     */
+    public static Set<String> split(String str, String separator) {
 
-		Set<String> set = Sets.newLinkedHashSet();
-		if (Strings.isNullOrEmpty(str))
-			return set;
-		for (String s : str.split(separator)) {
-			set.add(s);
-		}
-		return set;
-	}
+        Set<String> set = Sets.newLinkedHashSet();
+        if (Strings.isNullOrEmpty(str)) {
+            return set;
+        }
+        for (String s : str.split(separator)) {
+            set.add(s);
+        }
+        return set;
+    }
 
-	/**
-	 * 分割字符串进SET
-	 */
-	public static Set<String> checkTimestamp(String str, String separator) {
-		Set<String> set = Sets.newLinkedHashSet();
-		if (Strings.isNullOrEmpty(str))
-			return set;
-		for (String s : str.split(separator)) {
-			set.add(s);
-		}
-		return set;
-	}
+    /**
+     * 分割字符串进SET
+     */
+    public static Set<String> checkTimestamp(String str, String separator) {
+        Set<String> set = Sets.newLinkedHashSet();
+        if (Strings.isNullOrEmpty(str)) {
+            return set;
+        }
+        for (String s : str.split(separator)) {
+            set.add(s);
+        }
+        return set;
+    }
 
-	/**
-	 * 是否无状态令牌
-	 */
-	public static boolean isStatelessToken(Object token){
-		return token instanceof StatelessToken;
-	}
+    /**
+     * 是否无状态令牌
+     */
+    public static boolean isStatelessToken(Object token) {
+        return token instanceof StatelessToken;
+    }
 
-	/**
-	 * 对象转JSON
-	 */
-	public static String toJson(Object object){
-		try {
-			 return MAPPER.writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    /**
+     * 对象转JSON
+     */
+    public static String toJson(Object object) {
+        try {
+            return MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	/**
-	 * JSON转对象
-	 */
-	public static <T> T fromJson(String json,Class<T> valueType){
-		try {
-			return MAPPER.readValue(json,valueType);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    /**
+     * JSON转对象
+     */
+    public static <T> T fromJson(String json, Class<T> valueType) {
+        try {
+            return MAPPER.readValue(json, valueType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	/**
-	 * JSON转对象
-	 */
-	public static boolean hasLen(String string){
-		return !Strings.isNullOrEmpty(string);
-	}
+    /**
+     * JSON转对象
+     */
+    public static boolean hasLen(String string) {
+        return !Strings.isNullOrEmpty(string);
+    }
 
-	/**
-	 * 解析JWT的Payload
-	 */
-	public static String parseJwtPayload(String jwt){
+    /**
+     * 解析JWT的Payload
+     */
+    public static String parseJwtPayload(String jwt) {
         Assert.hasText(jwt, "JWT String argument cannot be null or empty.");
         String base64UrlEncodedHeader = null;
         String base64UrlEncodedPayload = null;
@@ -227,7 +229,7 @@ public abstract class Commons {
         for (char c : jwt.toCharArray()) {
             if (c == '.') {
                 CharSequence tokenSeq = io.jsonwebtoken.lang.Strings.clean(sb);
-                String token = tokenSeq!=null?tokenSeq.toString():null;
+                String token = tokenSeq != null ? tokenSeq.toString() : null;
 
                 if (delimiterCount == 0) {
                     base64UrlEncodedHeader = token;
@@ -242,7 +244,8 @@ public abstract class Commons {
             }
         }
         if (delimiterCount != 2) {
-            String msg = "JWT strings must contain exactly 2 period characters. Found: " + delimiterCount;
+            String msg =
+                "JWT strings must contain exactly 2 period characters. Found: " + delimiterCount;
             throw new MalformedJwtException(msg);
         }
         if (sb.length() > 0) {
@@ -267,18 +270,20 @@ public abstract class Commons {
         // =============== Body =================
         String payload;
         if (compressionCodec != null) {
-            byte[] decompressed = compressionCodec.decompress(TextCodec.BASE64URL.decode(base64UrlEncodedPayload));
+            byte[] decompressed = compressionCodec
+                .decompress(TextCodec.BASE64URL.decode(base64UrlEncodedPayload));
             payload = new String(decompressed, io.jsonwebtoken.lang.Strings.UTF_8);
         } else {
             payload = TextCodec.BASE64URL.decodeToString(base64UrlEncodedPayload);
         }
         return payload;
     }
-	public static Map<String, Object> readValue(String val) {
-	     try {
-	            return MAPPER.readValue(val, Map.class);
-	     } catch (IOException e) {
-	            throw new MalformedJwtException("Unable to read JSON value: " + val, e);
-	     }
-	}
+
+    public static Map<String, Object> readValue(String val) {
+        try {
+            return MAPPER.readValue(val, Map.class);
+        } catch (IOException e) {
+            throw new MalformedJwtException("Unable to read JSON value: " + val, e);
+        }
+    }
 }

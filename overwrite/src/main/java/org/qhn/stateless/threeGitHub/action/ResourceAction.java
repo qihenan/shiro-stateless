@@ -35,12 +35,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/resource")
 public class ResourceAction {
 
-	@Autowired
-	private ResourceService resourceService;
+    @Autowired
+    private ResourceService resourceService;
 
     @RequestMapping("/list")
     public String list(Model model) {
-    	model.addAttribute("resources", resourceService.list());
+        model.addAttribute("resources", resourceService.list());
         return "resource/resource_list";
     }
 

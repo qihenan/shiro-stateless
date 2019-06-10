@@ -28,18 +28,17 @@ import org.springframework.util.Assert;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class IdResolver implements Resolver {
 
-	@Override
-	public void resolve(Element element, Annotation annotation) {
-		FieldElement fieldElement = (FieldElement)element;
-		EntityElement entityElement = fieldElement.getEntityElement();
-		Assert.isNull(entityElement.getPrimaryKey()
-						, "实体："+fieldElement.getName()+ "只能有一个主键");
-		fieldElement.setPrimaryKey(Boolean.TRUE);
-		entityElement.setPrimaryKey(fieldElement);
-	}
+    @Override
+    public void resolve(Element element, Annotation annotation) {
+        FieldElement fieldElement = (FieldElement) element;
+        EntityElement entityElement = fieldElement.getEntityElement();
+        Assert.isNull(entityElement.getPrimaryKey()
+            , "实体：" + fieldElement.getName() + "只能有一个主键");
+        fieldElement.setPrimaryKey(Boolean.TRUE);
+        entityElement.setPrimaryKey(fieldElement);
+    }
 
 }

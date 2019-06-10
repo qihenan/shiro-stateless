@@ -36,56 +36,65 @@ import com.google.common.collect.Lists;
  *
  * @author wangjie (https://github.com/wj596)
  * @date 2016年6月24日
- *
  */
 public class UpdatesDelegate extends AbstractDelegate<int[]> {
 
-	private final LinkedList persistents = Lists.newLinkedList();
-	private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
-	private LinkedList<LinkedList<ValueElement>> batchValueElements;
+    private final LinkedList persistents = Lists.newLinkedList();
+    private final SqlBuilder sqlBuilder = SqlBuilder.BUILD();
+    private LinkedList<LinkedList<ValueElement>> batchValueElements;
 
-	public UpdatesDelegate(JdbcTemplate jdbcTemplate,List<?> persistents) {
-		super(jdbcTemplate);
-		this.persistents.addAll(persistents);
-	}
+    public UpdatesDelegate(JdbcTemplate jdbcTemplate, List<?> persistents) {
+        super(jdbcTemplate);
+        this.persistents.addAll(persistents);
+    }
 
-	@Override
-	public void prepare() {
-		Class<?> persistentClass = this.persistents.get(0).getClass();
-		this.checkEntity(persistentClass);
-		EntityElement entityElement = ElementResolver.resolve(persistentClass);
-		this.batchValueElements = Lists.newLinkedList();
-		this.sqlBuilder.UPDATE(entityElement.getTable());
-		for (FieldElement fieldElement: entityElement.getFieldElements().values()) {
-			if(fieldElement.isTransientField()) continue;
-			if(fieldElement.isPrimaryKey()) continue;
-			this.sqlBuilder.SET(fieldElement.getColumn() + " = ?");
-		}
-		this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn() + " = ?");
-		for (Object persistent : persistents) {
-			LinkedList<ValueElement> valueElements = Lists.newLinkedList();
-			Object primaryKeyValue = null;
-			for (FieldElement fieldElement: entityElement.getFieldElements().values()) {
-				if(fieldElement.isTransientField()) continue;
-				if (fieldElement.isPrimaryKey()) {
-					primaryKeyValue = JdbcCommons.invokeMethod(persistent, fieldElement.getReadMethod()
-									, "实体："+entityElement.getName()+" 主键："+fieldElement.getName()+" 获取值失败");
-					Assert.notNull(primaryKeyValue,"实体:" + entityElement.getName() + ", 主键不能为空");
-					continue;
-				}
-				Object value = JdbcCommons.invokeMethod(persistent, fieldElement.getReadMethod()
-							,"实体："+entityElement.getName()+" 字段："+fieldElement.getName()+" 获取值失败");
-				valueElements.add(new ValueElement(value,fieldElement.isClob(),fieldElement.isBlob()));
-			}
-			valueElements.add(new ValueElement(primaryKeyValue,Boolean.FALSE,Boolean.FALSE));
-			this.batchValueElements.add(valueElements);
-		}
-	}
+    @Override
+    public void prepare() {
+        Class<?> persistentClass = this.persistents.get(0).getClass();
+        this.checkEntity(persistentClass);
+        EntityElement entityElement = ElementResolver.resolve(persistentClass);
+        this.batchValueElements = Lists.newLinkedList();
+        this.sqlBuilder.UPDATE(entityElement.getTable());
+        for (FieldElement fieldElement : entityElement.getFieldElements().values()) {
+            if (fieldElement.isTransientField()) {
+                continue;
+            }
+            if (fieldElement.isPrimaryKey()) {
+                continue;
+            }
+            this.sqlBuilder.SET(fieldElement.getColumn() + " = ?");
+        }
+        this.sqlBuilder.WHERE(entityElement.getPrimaryKey().getColumn() + " = ?");
+        for (Object persistent : persistents) {
+            LinkedList<ValueElement> valueElements = Lists.newLinkedList();
+            Object primaryKeyValue = null;
+            for (FieldElement fieldElement : entityElement.getFieldElements().values()) {
+                if (fieldElement.isTransientField()) {
+                    continue;
+                }
+                if (fieldElement.isPrimaryKey()) {
+                    primaryKeyValue = JdbcCommons
+                        .invokeMethod(persistent, fieldElement.getReadMethod()
+                            , "实体：" + entityElement.getName() + " 主键：" + fieldElement.getName()
+                                + " 获取值失败");
+                    Assert.notNull(primaryKeyValue, "实体:" + entityElement.getName() + ", 主键不能为空");
+                    continue;
+                }
+                Object value = JdbcCommons.invokeMethod(persistent, fieldElement.getReadMethod()
+                    , "实体：" + entityElement.getName() + " 字段：" + fieldElement.getName() + " 获取值失败");
+                valueElements
+                    .add(new ValueElement(value, fieldElement.isClob(), fieldElement.isBlob()));
+            }
+            valueElements.add(new ValueElement(primaryKeyValue, Boolean.FALSE, Boolean.FALSE));
+            this.batchValueElements.add(valueElements);
+        }
+    }
 
-	@Override
-	protected int[] doExecute() throws DataAccessException{
-		String sql = this.sqlBuilder.toString().toUpperCase();
-		return this.jdbcTemplate.batchUpdate(sql,new ValueBatchSetter(this.LOBHANDLER,this.batchValueElements));
-	}
+    @Override
+    protected int[] doExecute() throws DataAccessException {
+        String sql = this.sqlBuilder.toString().toUpperCase();
+        return this.jdbcTemplate
+            .batchUpdate(sql, new ValueBatchSetter(this.LOBHANDLER, this.batchValueElements));
+    }
 
 }

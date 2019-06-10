@@ -30,32 +30,34 @@ import org.qhn.stateless.threeGitHub.util.Commons;
  * 抽象认证过滤器,扩展自AccessControlFilter增加了针对ajax请求的处理。
  *
  * author wangjie (https://github.com/wj596)
- * @date 2016年6月31日
  *
+ * @date 2016年6月31日
  */
-public abstract class JsetsAccessControlFilter extends AccessControlFilter{
+public abstract class JsetsAccessControlFilter extends AccessControlFilter {
 
-	/**
-	 * 定位到登陆界面，返回false过滤器链停止
-	 */
-	protected boolean respondLogin(ServletRequest request, ServletResponse response) throws IOException{
-		if (Commons.isAjax(WebUtils.toHttp(request))) {
-			Commons.ajaxFailed(WebUtils.toHttp(response)
-								, HttpServletResponse.SC_UNAUTHORIZED
-								, MessageConfig.REST_CODE_AUTH_UNAUTHORIZED
-								,MessageConfig.REST_MESSAGE_AUTH_UNAUTHORIZED);
-			return false;// 过滤器链停止
-		}
-		saveRequestAndRedirectToLogin(request, response);
-		return false;
-	}
+    /**
+     * 定位到登陆界面，返回false过滤器链停止
+     */
+    protected boolean respondLogin(ServletRequest request, ServletResponse response)
+        throws IOException {
+        if (Commons.isAjax(WebUtils.toHttp(request))) {
+            Commons.ajaxFailed(WebUtils.toHttp(response)
+                , HttpServletResponse.SC_UNAUTHORIZED
+                , MessageConfig.REST_CODE_AUTH_UNAUTHORIZED
+                , MessageConfig.REST_MESSAGE_AUTH_UNAUTHORIZED);
+            return false;// 过滤器链停止
+        }
+        saveRequestAndRedirectToLogin(request, response);
+        return false;
+    }
 
-	/**
-	 * 定位到指定界面，返回false过滤器链停止
-	 */
-	protected boolean respondRedirect(ServletRequest request, ServletResponse response,String redirectUrl) throws IOException{
-		WebUtils.issueRedirect(request, response, redirectUrl);
-		return false;
-	}
+    /**
+     * 定位到指定界面，返回false过滤器链停止
+     */
+    protected boolean respondRedirect(ServletRequest request, ServletResponse response,
+        String redirectUrl) throws IOException {
+        WebUtils.issueRedirect(request, response, redirectUrl);
+        return false;
+    }
 
 }

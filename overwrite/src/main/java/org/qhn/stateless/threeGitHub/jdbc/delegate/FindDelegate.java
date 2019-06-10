@@ -36,69 +36,73 @@ import org.springframework.jdbc.core.RowMapper;
  */
 public class FindDelegate<E> extends AbstractDelegate<E> {
 
-	private final String dialectName;
-	private final Class<?> persistentClass;
-	private final String sql;
-	private final Integer startRow;
-	private final Integer limit;
-	private final Map<String,String> dynamicMappings;
-	private final Object[] parameters;
-	private String querySql;
-	private EntityElement entityElement;
-	private DynamicEntityElement dynamicEntityElement;
-	private boolean isDynamic;
+    private final String dialectName;
+    private final Class<?> persistentClass;
+    private final String sql;
+    private final Integer startRow;
+    private final Integer limit;
+    private final Map<String, String> dynamicMappings;
+    private final Object[] parameters;
+    private String querySql;
+    private EntityElement entityElement;
+    private DynamicEntityElement dynamicEntityElement;
+    private boolean isDynamic;
 
-	public FindDelegate(JdbcTemplate jdbcTemplate,String dialectName,Class<?> persistentClass,String sql) {
-		this(jdbcTemplate, dialectName,persistentClass,sql,null,null,null,null);
-	}
+    public FindDelegate(JdbcTemplate jdbcTemplate, String dialectName, Class<?> persistentClass,
+        String sql) {
+        this(jdbcTemplate, dialectName, persistentClass, sql, null, null, null, null);
+    }
 
-	public FindDelegate(JdbcTemplate jdbcTemplate,String dialectName
-			,Class<?> persistentClass,String sql,Object[] parameters) {
-		this(jdbcTemplate, dialectName,persistentClass,sql,parameters,null,null,null);
-	}
+    public FindDelegate(JdbcTemplate jdbcTemplate, String dialectName
+        , Class<?> persistentClass, String sql, Object[] parameters) {
+        this(jdbcTemplate, dialectName, persistentClass, sql, parameters, null, null, null);
+    }
 
-	public FindDelegate(JdbcTemplate jdbcTemplate,String dialectName
-				,Class<?> persistentClass,String sql,Object[] parameters
-				,Map<String,String> dynamicMappings,Integer startRow,Integer limit) {
-		super(jdbcTemplate);
-		this.dialectName = dialectName;
-		this.persistentClass = persistentClass;
-		this.sql = sql;
-		this.parameters = parameters;
-		this.dynamicMappings = dynamicMappings;
-		this.startRow = startRow;
-		this.limit = limit;
-	}
+    public FindDelegate(JdbcTemplate jdbcTemplate, String dialectName
+        , Class<?> persistentClass, String sql, Object[] parameters
+        , Map<String, String> dynamicMappings, Integer startRow, Integer limit) {
+        super(jdbcTemplate);
+        this.dialectName = dialectName;
+        this.persistentClass = persistentClass;
+        this.sql = sql;
+        this.parameters = parameters;
+        this.dynamicMappings = dynamicMappings;
+        this.startRow = startRow;
+        this.limit = limit;
+    }
 
-	@Override
-	public void prepare() {
-		if(this.isEntity(this.persistentClass)){
-			this.isDynamic = false;
-			this.entityElement = ElementResolver.resolve(this.persistentClass);
-		} else {
-			this.isDynamic = true;
-			this.dynamicEntityElement = ElementResolver.resolveDynamic(this.persistentClass,this.dynamicMappings);
-		}
-		if(null!=this.limit&&this.limit>0){
-			this.querySql = PaginationUtil.pagination(dialectName, this.sql, startRow, this.limit);
-		} else {
-			this.querySql  = this.sql;
-		}
-	}
+    @Override
+    public void prepare() {
+        if (this.isEntity(this.persistentClass)) {
+            this.isDynamic = false;
+            this.entityElement = ElementResolver.resolve(this.persistentClass);
+        } else {
+            this.isDynamic = true;
+            this.dynamicEntityElement = ElementResolver
+                .resolveDynamic(this.persistentClass, this.dynamicMappings);
+        }
+        if (null != this.limit && this.limit > 0) {
+            this.querySql = PaginationUtil.pagination(dialectName, this.sql, startRow, this.limit);
+        } else {
+            this.querySql = this.sql;
+        }
+    }
 
-	@Override
-	@SuppressWarnings("all")
-	protected E doExecute() throws DataAccessException{
-		RowMapper rowMapper = null;
-		if(this.isDynamic){
-			rowMapper = new DynamicEntityRowMapper(this.LOBHANDLER,this.dynamicEntityElement,this.persistentClass);
-		} else {
-			rowMapper = new EntityRowMapper(this.LOBHANDLER,this.entityElement,this.persistentClass);
-		}
-		if(null==this.parameters||this.parameters.length==0){
-			return (E) this.jdbcTemplate.query(this.querySql,rowMapper);
-		} else {
-			return (E) this.jdbcTemplate.query(this.querySql,this.parameters,rowMapper);
-		}
-	}
+    @Override
+    @SuppressWarnings("all")
+    protected E doExecute() throws DataAccessException {
+        RowMapper rowMapper = null;
+        if (this.isDynamic) {
+            rowMapper = new DynamicEntityRowMapper(this.LOBHANDLER, this.dynamicEntityElement,
+                this.persistentClass);
+        } else {
+            rowMapper = new EntityRowMapper(this.LOBHANDLER, this.entityElement,
+                this.persistentClass);
+        }
+        if (null == this.parameters || this.parameters.length == 0) {
+            return (E) this.jdbcTemplate.query(this.querySql, rowMapper);
+        } else {
+            return (E) this.jdbcTemplate.query(this.querySql, this.parameters, rowMapper);
+        }
+    }
 }
