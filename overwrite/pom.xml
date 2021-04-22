@@ -16,7 +16,7 @@
   <description>overwrite project for Spring Boot</description>
 
   <properties>
-    <shiro.version>1.4.0</shiro.version>
+    <shiro.version>1.7.1</shiro.version>
     <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
     <spring-data-redis.version>2.1.5.RELEASE</spring-data-redis.version>
     <jjwt.version>0.9.0</jjwt.version>
